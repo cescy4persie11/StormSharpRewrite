@@ -30,6 +30,12 @@ namespace StormSpiritRewrite
 
         private ChaseZip chaseZip;
 
+        private InitiateCombo initiateCombo;
+
+        private ZipDodge zipDodge;
+
+        private ManaAbuse manaAbuse;
+
         private TargetFind targetFind;
 
         private Remnant remnant;
@@ -80,6 +86,7 @@ namespace StormSpiritRewrite
             }
             selfZip.SelfZipDraw();
             chaseZip.ChaseZipDraw();
+            initiateCombo.InitiateComboDraw();
         }
 
         public void OnLoad()
@@ -101,6 +108,12 @@ namespace StormSpiritRewrite
             this.targetFind = new TargetFind();
             this.selfZip = new SelfZip();
             this.chaseZip = new ChaseZip();
+            this.initiateCombo = new InitiateCombo();
+            this.manaAbuse = new ManaAbuse();
+            this.zipDodge = new ZipDodge();
+            //this.constants = new Constants();
+
+
             Game.PrintMessage(
                 "Storm Spirit" + " v " + Assembly.GetExecutingAssembly().GetName().Version + " loaded",
                 MessageType.LogMessage);
@@ -115,6 +128,8 @@ namespace StormSpiritRewrite
 
             selfZip.SelfZipPlayerExecution();
             chaseZip.ChaseZipPlayerExecution();
+            initiateCombo.InitiateComboPlayerExecution();
+            manaAbuse.ManaAbusePlayerExecution(args);
 
         }
 
@@ -161,6 +176,71 @@ namespace StormSpiritRewrite
                 return;
             }
         }
+
+        public void OnUpdate_InitiateCombo()
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+
+            var CanAction = !Me.IsChanneling();
+
+            if (Variables.InInitiateZip && CanAction)
+            {
+                initiateCombo.Execute();
+                return;
+            }
+        }
+
+        public void OnUpdate_ManaAbuse()
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+
+            var CanAction = !Me.IsChanneling();
+            if (Variables.DropItemPressed && CanAction)
+            {
+                manaAbuse.Execute();
+            }
+        }
+
+        public void OnUpdate_ZipDodge()
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            var CanAction = !Me.IsChanneling();
+            if (CanAction)
+            {
+                zipDodge.SelfZipDodgeExecute();
+                zipDodge.SpecialZipDodgeExecute();
+            }
+
+        }
+
+
 
 
 

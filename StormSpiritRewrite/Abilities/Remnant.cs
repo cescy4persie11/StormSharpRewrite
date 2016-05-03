@@ -55,7 +55,7 @@ namespace StormSpiritRewrite.Abilities
             if (Utils.SleepCheck("remnant"))
             {
                 this.ability.UseAbility();
-                Utils.Sleep(050, "remnant");
+                Utils.Sleep(100, "remnant");
             }
         }
 

@@ -44,6 +44,26 @@ namespace StormSpiritRewrite.Abilities
             return this.ability.CanBeCasted();
         }
 
+        public float CoolDown()
+        {
+            return this.ability.Cooldown;
+        }
+
+        public bool inVortex()
+        {
+            return this.ability.Cooldown < 22 - this.ability.Level && this.ability.Cooldown > 20.5 - this.ability.Level;
+        }
+
+        public bool inCoolDown()
+        {
+            return this.ability.Cooldown != 0; 
+        }
+
+        public bool OutOfRange(Hero target)
+        {
+            return Variables.Hero.Distance2D(target) >= this.ability.CastRange + 100;
+        }
+
         public void UseOn(Hero target)
         {
             if (target == null || !target.IsValid)
@@ -62,7 +82,7 @@ namespace StormSpiritRewrite.Abilities
                 {
                     this.ability.UseAbility(target);
                 }
-                Utils.Sleep(50, "pull");
+                Utils.Sleep(100, "pull");
             }
         }
 

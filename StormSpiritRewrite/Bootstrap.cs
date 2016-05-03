@@ -45,6 +45,9 @@ namespace StormSpiritRewrite
         {
             this.stormsharp.OnUpdate_SelfZip();
             this.stormsharp.OnUpdate_ChaseZip();
+            this.stormsharp.OnUpdate_InitiateCombo();
+            this.stormsharp.OnUpdate_ManaAbuse();
+            this.stormsharp.OnUpdate_ZipDodge();
         }
 
         private void Game_OnWndProc(WndEventArgs args)

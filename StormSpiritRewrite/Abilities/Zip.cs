@@ -25,6 +25,10 @@ namespace StormSpiritRewrite.Abilities
 
         private Vector3 zipPosition;
 
+        public Vector3 zipLoc;
+
+
+
         public Zip(Ability ability)
         {
             this.ability = ability;
@@ -56,8 +60,61 @@ namespace StormSpiritRewrite.Abilities
             else
             {
                 SetZipFacingDirection(Variables.Hero, 50);
+            }           
+        }
+
+        public void SetDodgeZipPosition(Hero me, Hero enemy, Ability spell)
+        {
+            var zipTarget = new Vector3(0, 0, me.Position.Z);
+            this.zipLoc = me.Position;
+            float distance = (float)SharpDX.Vector3.Distance(enemy.Position, me.Position);
+            if (
+                spell.Name == "lion_finger_of_death"
+                    )
+            {
+                var X = me.Position.X + 200 * Math.Cos(me.RotationRad);
+                var Y = me.Position.Y + 200 * Math.Sin(me.RotationRad);
+                zipTarget.X = Convert.ToSingle(X);
+                zipTarget.Y = Convert.ToSingle(Y);
+                zipTarget.Z = me.Position.Z;
+
             }
-            
+            else if (spell.Name == "lina_laguna_blade")
+            {
+                zipTarget.X = me.Position.X - 200 * (enemy.Position.X - me.Position.X) / distance;
+                zipTarget.Y = me.Position.Y - 200 * (enemy.Position.Y - me.Position.Y) / distance;
+                this.zipLoc = zipTarget;
+            }
+            else if (spell.Name == "doom_bringer_doom")
+            {
+                //zipTarget.X = me.Position.X - 200 * (enemy.Position.X - me.Position.X) / distance;
+                //zipTarget.Y = me.Position.Y - 200 * (enemy.Position.Y - me.Position.Y) / distance;
+                zipTarget.X = me.Position.X + Convert.ToSingle(100 * Math.Cos(me.RotationRad));
+                zipTarget.Y = me.Position.Y + Convert.ToSingle(100 * Math.Sin(me.RotationRad));
+            }
+
+            else if (spell.Name == "beastmaster_primal_roar")
+            {
+                var X = me.Position.X + 150 * Math.Cos(me.RotationRad);
+                var Y = me.Position.Y + 150 * Math.Sin(me.RotationRad);
+                zipTarget.X = Convert.ToSingle(X);
+                zipTarget.Y = Convert.ToSingle(Y);
+                zipTarget.Z = me.Position.Z;
+            }
+            else if (spell.Name == "bane_fiends_grip")
+            {var X = me.Position.X + 150 * Math.Cos(me.RotationRad);
+                var Y = me.Position.Y + 150 * Math.Sin(me.RotationRad);
+                zipTarget.X = Convert.ToSingle(X);
+                zipTarget.Y = Convert.ToSingle(Y);
+                zipTarget.Z = me.Position.Z;
+                
+            }
+            else
+            {
+                zipTarget.X = me.Position.X;
+                zipTarget.Y = me.Position.Y;
+            }
+            this.zipPosition = zipTarget;
         }
 
         public void SetDynamicSelfZipPosition()

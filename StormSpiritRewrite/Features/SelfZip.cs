@@ -54,7 +54,7 @@ namespace StormSpiritRewrite.Utilities
                 if (Utils.SleepCheck("selfzip")) {
                     zip.SetStaticSelfZipPosition();
                     zip.Use();
-                    Utils.Sleep(1500, "selfzip");
+                    Utils.Sleep(1000, "selfzip");
                 }
             }
             else
@@ -150,7 +150,5 @@ namespace StormSpiritRewrite.Utilities
                 this.targetFind.DrawTarget();
             }
         }
-
-
     }
 }
