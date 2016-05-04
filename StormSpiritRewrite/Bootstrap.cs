@@ -21,9 +21,33 @@ namespace StormSpiritRewrite
             Events.OnLoad += this.Events_Onload;
             //Events.OnClose += this.Events_OnClose;
             Game.OnUpdate += this.Game_OnUpdate;
-            //Game.OnWndProc += this.Game_OnWndProc;
+            Game.OnWndProc += this.Game_OnWndProc;
             Drawing.OnDraw += this.Drawing_OnDraw;
+            Drawing.OnPreReset += this.Drawing_OnPreReset;
+            Drawing.OnPostReset += this.Drawing_OnPostReset;
+            Drawing.OnEndScene += this.Drawing_OnEndScene;
+            AppDomain.CurrentDomain.DomainUnload += this.CurrentDomain_DomainUnload;
             Player.OnExecuteOrder += this.Player_OnExecuteOrder;
+        }
+
+        private void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            this.stormsharp.CurrentDomain_DomainUnload();
+        }
+
+        private void Drawing_OnPreReset(EventArgs args)
+        {
+            this.stormsharp.Drawing_OnPreReset(args);
+        }
+
+        private void Drawing_OnPostReset(EventArgs args)
+        {
+            this.stormsharp.Drawing_OnPostReset(args);
+        }
+
+        private void Drawing_OnEndScene(EventArgs args)
+        {
+            this.stormsharp.Drawing_OnEndScene(args);
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -48,11 +72,13 @@ namespace StormSpiritRewrite
             this.stormsharp.OnUpdate_InitiateCombo();
             this.stormsharp.OnUpdate_ManaAbuse();
             this.stormsharp.OnUpdate_ZipDodge();
+            this.stormsharp.OnUpdate_Flee();
+            this.stormsharp.OnUpdate();
         }
 
         private void Game_OnWndProc(WndEventArgs args)
         {
-            //this.stormsharp.OnWndProc(args);
+            this.stormsharp.OnWndProc(args);
         }
 
         private void Player_OnExecuteOrder(Player sender, ExecuteOrderEventArgs args)

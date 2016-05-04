@@ -52,6 +52,14 @@ namespace StormSpiritRewrite
             }
         }
 
+        public static bool LegacyOrQwer
+        {
+            get
+            {
+                return MenuManager.Legacy;
+            }
+        }
+
         public static Team EnemyTeam { get; set; }
 
         public static Hero Hero { get; set; }

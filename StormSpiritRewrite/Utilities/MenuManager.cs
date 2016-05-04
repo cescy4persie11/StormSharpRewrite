@@ -16,6 +16,8 @@ namespace StormSpiritRewrite.Utilities
 
         private readonly MenuItem SelfZipMenu;
 
+        private readonly MenuItem LegacyOrQwerMenu;
+
         private readonly Menu FleeMenu;
 
         private readonly MenuItem FleeHotKey;
@@ -33,19 +35,21 @@ namespace StormSpiritRewrite.Utilities
         public MenuManager(string heroName)
         {
             this.Menu = new Menu("LoneDruidSharp", "LoneDruidSharp", true, "npc_dota_hero_storm_spirit", true);
+            this.LegacyOrQwerMenu = new MenuItem("Hotkey Setting", "Do you use LegacyHotkey?").SetValue(true).SetTooltip("Enable/Disable : Legacy/QWER");
             this.SelfZipMenu = new MenuItem("SelfZip", "SelfZip").SetValue(new KeyBind('W', KeyBindType.Press));
             this.ChaseZipMenu = new MenuItem("ChaseZipMenu", "ChaseZipMenu").SetValue(new KeyBind('F', KeyBindType.Press));
             this.InitiateZipMenu = new MenuItem("InitiateZip", "InitiateZip").SetValue(new KeyBind('D', KeyBindType.Press));
             this.AutoAttackDodgeMenu = new MenuItem("AutoAttack Dodge", "AutoAttack Dodge").SetValue(true).SetTooltip("");
             this.DropManaItemMenu = new MenuItem("DropManaItem", "Press to Drop Mana Item").SetValue(new KeyBind('Z', KeyBindType.Press));
             this.FleeMenu = new Menu("Flee mode settings", "Flee mode settings");
-            this.FleeDistance = new MenuItem("FleeDistance", "FleeDistance").SetValue(new Slider(500, 400, 1000)).SetTooltip("zip distance in flee mode");
+            this.FleeDistance = new MenuItem("FleeDistance", "FleeDistance").SetValue(new Slider(450, 400, 1000)).SetTooltip("zip distance in flee mode");
             this.FleeHotKey = new MenuItem("FleeHotkey", "FleeHotkey").SetValue(new KeyBind('C', KeyBindType.Press)).SetTooltip("press to zip towards fountain");
             this.FleeTpEnabled = new MenuItem("FleeTpEnabled", "FleeTpEnabled").SetValue(new KeyBind('T', KeyBindType.Toggle)).SetTooltip("Enable Tp while zip-flee");
             this.FleeMenu.AddItem(this.FleeHotKey);
             this.FleeMenu.AddItem(this.FleeTpEnabled);
             this.FleeMenu.AddItem(this.FleeDistance);
             this.Menu.AddSubMenu(FleeMenu);
+            this.Menu.AddItem(this.LegacyOrQwerMenu);
             this.Menu.AddItem(this.SelfZipMenu);
             this.Menu.AddItem(this.ChaseZipMenu);
             this.Menu.AddItem(this.InitiateZipMenu);
@@ -57,6 +61,14 @@ namespace StormSpiritRewrite.Utilities
             get
             {
                 return this.ChaseZipMenu.GetValue<KeyBind>().Active;
+            }
+        }
+
+        public bool Legacy
+        {
+            get
+            {
+                return this.LegacyOrQwerMenu.GetValue<bool>();
             }
         }
 
@@ -92,7 +104,7 @@ namespace StormSpiritRewrite.Utilities
             }
         }
 
-        public int getTpDistance
+        public int TpDistance
         {
             get
             {

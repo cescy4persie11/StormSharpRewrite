@@ -33,5 +33,10 @@ namespace StormSpiritRewrite.Utilities
                 Variables.PowerTreadsSwitcher = new PowerTreadsSwitcher(powerTreads as PowerTreads);
             }
         }
+
+        public void SoulRing(bool condition)
+        {
+
+        }
     }
 }

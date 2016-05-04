@@ -9,10 +9,6 @@ namespace StormSpiritRewrite
 {
     public class Constants
     {
-        
-
-        private static List<String> SpellsList_StartDodgeWhenInAbilityPhase;
-
         public Constants()
         {
         }

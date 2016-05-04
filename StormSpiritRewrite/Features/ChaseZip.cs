@@ -73,7 +73,7 @@ namespace StormSpiritRewrite.Features
             //Distance Closing with Long Zip
             if (me.Distance2D(this.Target) > me.AttackRange + 100)
             {
-                if (zip.CanBeCast() && (!inPassive || (inPassive && myAttackAlmostLand()) || !me.IsAttacking()))
+                if (!myAttackAlmostLand() && zip.CanBeCast() && (!inPassive || (inPassive && myAttackAlmostLand()) || !me.IsAttacking()))
                 {
 
                     if (Utils.SleepCheck("zip") && Prediction.StraightTime(this.Target) > 600)
@@ -88,7 +88,20 @@ namespace StormSpiritRewrite.Features
             else
             {
                 //else is just selfZip
-                selfZip.Execute();
+                if (zip.NoManaForZip())
+                {
+                    if (Orbwalking.AttackOnCooldown())
+                    {
+                        Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                    }
+                    else
+                    {
+                        Orbwalking.Attack(this.Target, true);
+                    }
+                }
+                else {
+                    selfZip.Execute();
+                }
             }
 
         }

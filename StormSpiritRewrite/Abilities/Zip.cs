@@ -19,7 +19,7 @@ namespace StormSpiritRewrite.Abilities
 
         private readonly Sleeper sleeper;
 
-        private readonly uint level;
+        public readonly uint level;
 
         private Vector2 iconSize;
 
@@ -45,10 +45,9 @@ namespace StormSpiritRewrite.Abilities
                     && !Variables.Hero.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
         }
 
-        public void testAbility()
+        public bool NoManaForZip()
         {
-            Console.WriteLine("zip is ability behavior " + this.ability.AbilityBehavior);
-            Console.WriteLine("I am in " + Variables.Hero.NetworkActivity);
+            return Variables.Hero.Mana <= 30 + 0.08 * Variables.Hero.MaximumMana;
         }
 
         public void SetStaticSelfZipPosition()
@@ -160,6 +159,23 @@ namespace StormSpiritRewrite.Abilities
                     Ensage.Attribute.Intelligence,
                     Variables.PowerTreadsSwitcher.PowerTreads.ActiveAttribute,
                     false);
+            }
+        }
+
+        public void SetZipToFountain(int D)
+        {
+            var zipTarget = Variables.Hero.Position;
+            var Fountain = ObjectManager.GetEntities<Unit>().Where(_x => _x.ClassID == ClassID.CDOTA_Unit_Fountain && _x.Team == Variables.Hero.Team).FirstOrDefault();
+            if (Fountain == null)
+            {
+                this.zipPosition = Variables.Hero.Position;
+            }
+            else
+            {
+                zipTarget.X = Variables.Hero.Position.X + D / Variables.Hero.Distance2D(Fountain) * (Fountain.Position.X - Variables.Hero.Position.X);
+                zipTarget.Y = Variables.Hero.Position.Y + D / Variables.Hero.Distance2D(Fountain) * (Fountain.Position.Y - Variables.Hero.Position.Y);
+                zipTarget.Z = Variables.Hero.Position.Z;
+                this.zipPosition = zipTarget;
             }
         }
     }

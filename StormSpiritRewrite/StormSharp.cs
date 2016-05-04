@@ -34,7 +34,11 @@ namespace StormSpiritRewrite
 
         private ZipDodge zipDodge;
 
+        private Flee flee;
+
         private ManaAbuse manaAbuse;
+
+        private ManaDisplay manaDisplay;
 
         private TargetFind targetFind;
 
@@ -111,6 +115,8 @@ namespace StormSpiritRewrite
             this.initiateCombo = new InitiateCombo();
             this.manaAbuse = new ManaAbuse();
             this.zipDodge = new ZipDodge();
+            this.flee = new Flee();
+            this.manaDisplay = new ManaDisplay();
             //this.constants = new Constants();
 
 
@@ -130,7 +136,28 @@ namespace StormSpiritRewrite
             chaseZip.ChaseZipPlayerExecution();
             initiateCombo.InitiateComboPlayerExecution();
             manaAbuse.ManaAbusePlayerExecution(args);
+            manaDisplay.PlayerExecution_ManaDisplay();
 
+        }
+
+        public void OnWndProc(WndEventArgs args)
+        {
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                return;
+            }
+            manaDisplay.OnWndProc(args);
+            
+        }
+
+        public void OnUpdate()
+        {
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                return;
+            }
+
+            manaDisplay.Execute();
         }
 
         public void OnUpdate_SelfZip()
@@ -237,7 +264,84 @@ namespace StormSpiritRewrite
                 zipDodge.SelfZipDodgeExecute();
                 zipDodge.SpecialZipDodgeExecute();
             }
+        }
 
+        public void OnUpdate_Flee()
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            if (!Variables.FleePress) return;
+            bool TpEnabled = Variables.MenuManager.TpEnabled;
+            int dist = Variables.MenuManager.TpDistance;
+            flee.Execute(dist, TpEnabled);
+        }
+
+        public void Drawing_OnPreReset(EventArgs args)
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            manaDisplay.Drawing_OnPreReset(args);
+        }
+
+        public void Drawing_OnPostReset(EventArgs args)
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            manaDisplay.Drawing_OnPostReset(args);
+        }
+
+        public void Drawing_OnEndScene(EventArgs args)
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            manaDisplay.Drawing_OnEndScene(args);
+        }
+
+        public void CurrentDomain_DomainUnload()
+        {
+            if (!this.pause)
+            {
+                this.pause = Game.IsPaused;
+            }
+
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                this.pause = Game.IsPaused;
+                return;
+            }
+            manaDisplay.CurrentDomain_DomainUnload();
         }
 
 

@@ -62,7 +62,7 @@ namespace StormSpiritRewrite.Utilities
                 if (this.Target == null) return;
                 var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
                 var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
-                var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff"); 
+                var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");                               
                 // first self zip
                 if(!inPassive && !enemyHitByMyOverload)
                 {
@@ -71,7 +71,7 @@ namespace StormSpiritRewrite.Utilities
                         zip.SetDynamicSelfZipPosition();
                         zip.Use();
                         Orbwalking.Attack(this.Target, true);
-                        Utils.Sleep(100, "selfzip");
+                        Utils.Sleep(500, "selfzip");
                         return;
                     }
                     
@@ -79,7 +79,20 @@ namespace StormSpiritRewrite.Utilities
                 //subsequent zips                                       
                 if (me.Distance2D(this.Target) < 300)
                 {
-                    //if < 250, rezip after attack lands   
+                    // orbwalk
+                    if (inPassive)
+                    {
+                        //orbwalk
+                        if (Orbwalking.AttackOnCooldown())
+                        {
+                            Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                        }
+                        else
+                        {
+                            Orbwalking.Attack(this.Target, true);
+                        }
+                    }
+                    //if < 300, rezip after attack lands   
                     // now support Hold selfZip Attack, Cast Time * speed = 270
                     if (enemyHitByMyOverload && !inPassive)
                     {
@@ -88,36 +101,56 @@ namespace StormSpiritRewrite.Utilities
                             zip.SetDynamicSelfZipPosition();
                             zip.Use();
                             Orbwalking.Attack(this.Target, true);
-                            Utils.Sleep(100, "selfzip");
+                            Utils.Sleep(500, "selfzip");
                         }
                     }
                 }
-                else
+                else //> 300
                 {
-                    if (myAttackAlmostLand())
+                    if (me.Distance2D(this.Target) < me.AttackRange + 50)
                     {
-                        if (Utils.SleepCheck("selfzip"))
+                        if (inPassive)
                         {
-                            zip.SetDynamicSelfZipPosition();
-                            zip.Use();
-                            Orbwalking.Attack(this.Target, true);
-                            Utils.Sleep(100, "selfzip");
+                            //orbwalk
+                            if (Orbwalking.AttackOnCooldown())
+                            {
+                                Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                            }
+                            else
+                            {
+                                Orbwalking.Attack(this.Target, true);
+                            }
                         }
-                    }
-                    else
-                    {
-                        //still provide the short distance case to do rezip
-                        if (enemyHitByMyOverload && !inPassive)
+
+                        if (myAttackAlmostLand())
                         {
                             if (Utils.SleepCheck("selfzip"))
                             {
                                 zip.SetDynamicSelfZipPosition();
                                 zip.Use();
                                 Orbwalking.Attack(this.Target, true);
-                                Utils.Sleep(100, "selfzip");
+                                Utils.Sleep(500, "selfzip");
                             }
                         }
-                    }
+                        else
+                        {
+                            // attack not dispatched, > 300
+                            // if in attack range
+
+                            //still provide the short distance case to do rezip, but only within attack range
+                            if (enemyHitByMyOverload && !inPassive)
+                            {
+                                if (Utils.SleepCheck("selfzip"))
+                                {
+                                    zip.SetDynamicSelfZipPosition();
+                                    zip.Use();
+                                    Orbwalking.Attack(this.Target, true);
+                                    Utils.Sleep(500, "selfzip");
+                                }
+                            }
+
+                        }
+                    }       
                 }
             }
         }

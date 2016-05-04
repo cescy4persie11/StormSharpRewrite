@@ -237,10 +237,6 @@ namespace StormSpiritRewrite.Features
             }
         }
 
-
-
-
-
         private static bool IsFacing(Unit StartUnit, dynamic Target)
         {
             if (!(Target is Unit || Target is Vector3)) throw new ArgumentException("IsFacing => INVALID PARAMETERS!", "Target");
@@ -255,7 +251,6 @@ namespace StormSpiritRewrite.Features
 
             return (Math.PI - Math.Abs(Math.Atan2(n1, n2))) < 0.15;
         }
-
 
         private float RadiansToFace(Unit StartUnit, dynamic Target)
         {
@@ -277,7 +272,5 @@ namespace StormSpiritRewrite.Features
                             x.Team == Variables.Hero.GetEnemyTeam() && !x.IsIllusion && x.IsAlive && x.IsVisible
                             && x.Distance2D(Variables.Hero.Position) <= range);
         }
-
-
     }
 }

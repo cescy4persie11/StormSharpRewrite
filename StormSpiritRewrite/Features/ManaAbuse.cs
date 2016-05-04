@@ -142,6 +142,7 @@ namespace StormSpiritRewrite.Features
 
         public void ManaAbusePlayerExecution(ExecuteOrderEventArgs args)
         {
+            if (!AbuseDroppedItem) return;
             if (args.Order == Order.MoveLocation)
             {
                 if (ObjectManager.GetEntities<PhysicalItem>().Where(x => x.Distance2D(me) < 250).Reverse().ToList().Count() != 0
