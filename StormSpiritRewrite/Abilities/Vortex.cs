@@ -82,7 +82,7 @@ namespace StormSpiritRewrite.Abilities
                 {
                     this.ability.UseAbility(target);
                 }
-                Utils.Sleep(100, "pull");
+                Utils.Sleep(300, "pull");
             }
         }
 

@@ -60,6 +60,14 @@ namespace StormSpiritRewrite
             }
         }
 
+        public static bool TpEnabled
+        {
+            get
+            {
+                return MenuManager.TpEnabled;
+            }
+        }
+
         public static Team EnemyTeam { get; set; }
 
         public static Hero Hero { get; set; }

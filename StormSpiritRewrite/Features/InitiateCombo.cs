@@ -27,6 +27,8 @@ namespace StormSpiritRewrite.Features
 
         private Hero me;
 
+        private bool HexInitiate;
+
         private readonly ItemUsage itemUsage;
 
         private TargetFind targetFind;
@@ -53,7 +55,7 @@ namespace StormSpiritRewrite.Features
             this.vortex = Variables.Vortex;
             this.remnant = Variables.Remnant;
             this.me = Variables.Hero;
-            this.targetFind.Find();
+            //this.targetFind.Find();
         }
 
         public void Execute()
@@ -63,6 +65,9 @@ namespace StormSpiritRewrite.Features
             if (this.Target == null) return;
             var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
             var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
+            // Mana Effiency
+            itemUsage.ManaEfficiency();
+            itemUsage.OffensiveItem(this.Target);
             //vortex in cooldown -> not initiate yet
             if (!vortex.inCoolDown())
             {
@@ -74,7 +79,15 @@ namespace StormSpiritRewrite.Features
                     {
                         zip.SetLongZipPosition(this.Target);
                         zip.Use();
-                        Orbwalking.Attack(this.Target, true);
+                        if (Orbwalking.AttackOnCooldown())
+                        {
+                            Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                        }
+                        else
+                        {
+                            Orbwalking.Attack(this.Target, true);
+                        }
+                        //Orbwalking.Attack(this.Target, true);
                         Utils.Sleep(100, "zip");
                     }
                 }
@@ -83,18 +96,35 @@ namespace StormSpiritRewrite.Features
                 {
                     if (Utils.SleepCheck("pull"))
                     {
-                        vortex.UseOn(Target);
-                        Orbwalking.Attack(Target, true);
+                        vortex.UseOn(this.Target);
+                        if (Orbwalking.AttackOnCooldown())
+                        {
+                            Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                        }
+                        else
+                        {
+                            Orbwalking.Attack(this.Target, true);
+                        }
+                        //Orbwalking.Attack(Target, true);
                         Utils.SleepCheck("pull");
                     }
                 }
             }
             else //vortex in cooldown
             {
+                if (Orbwalking.AttackOnCooldown())
+                {
+                    Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                }
+                else
+                {
+                    Orbwalking.Attack(this.Target, true);
+                }
                 // first remnant land
                 if (vortex.inVortex())
                 {
-                    if(!inPassive && remnant.CanRemnant)
+                    
+                    if (!inPassive && remnant.CanRemnant)
                     {
                         if (Utils.SleepCheck("remnant"))
                         {
@@ -105,7 +135,7 @@ namespace StormSpiritRewrite.Features
                     }
                 }
                 else
-                {
+                {                  
                     chaseZip.Execute();
                 }
             }
@@ -125,6 +155,8 @@ namespace StormSpiritRewrite.Features
 
         public void InitiateComboDraw()
         {
+            this.targetFind.Find();
+            if (this.Target == null) return;
             if (Variables.InInitiateZip)
             {
                 this.targetFind.DrawTarget();

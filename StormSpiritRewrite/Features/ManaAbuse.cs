@@ -131,8 +131,10 @@ namespace StormSpiritRewrite.Features
                 }
                 if (soulRing.CanBeCasted() && hasDroppedAllManaItem())
                 {
+                    
                     if (Utils.SleepCheck("soulring"))
                     {
+                        SwitchTreadToStr();
                         soulRing.UseAbility();
                         Utils.Sleep(100, "soulring");
                     }
@@ -157,7 +159,17 @@ namespace StormSpiritRewrite.Features
             }
         }
 
-
+        public void SwitchTreadToStr()
+        {
+            if (Variables.PowerTreadsSwitcher != null && Variables.PowerTreadsSwitcher.IsValid
+                && Variables.Hero.Health > 300)
+            {
+                Variables.PowerTreadsSwitcher.SwitchTo(
+                    Ensage.Attribute.Strength,
+                    Variables.PowerTreadsSwitcher.PowerTreads.ActiveAttribute,
+                    false);
+            }
+        }
 
     }
 }

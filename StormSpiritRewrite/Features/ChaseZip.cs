@@ -47,7 +47,7 @@ namespace StormSpiritRewrite.Features
             this.zip = Variables.Zip;
             this.remnant = Variables.Remnant;
             this.me = Variables.Hero;
-            this.targetFind.Find();
+            //this.targetFind.Find();
         }
 
         public void Execute()
@@ -58,6 +58,9 @@ namespace StormSpiritRewrite.Features
             var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
             var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
             var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
+            //Mana efficiency
+            itemUsage.ManaEfficiency();
+
             //var myAttackInAir = ObjectManager.TrackingProjectiles.Any(x => x.Source.Name == me.Name && x.Source.Team != me.GetEnemyTeam());
             //always try to cast remnant if it can hit anyone
             if (remnant.CanHitEnemyWithOutPull() && remnant.CanRemnant)
@@ -73,6 +76,14 @@ namespace StormSpiritRewrite.Features
             //Distance Closing with Long Zip
             if (me.Distance2D(this.Target) > me.AttackRange + 100)
             {
+                if (Orbwalking.AttackOnCooldown())
+                {
+                    Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                }
+                else
+                {
+                    Orbwalking.Attack(this.Target, true);
+                }
                 if (!myAttackAlmostLand() && zip.CanBeCast() && (!inPassive || (inPassive && myAttackAlmostLand()) || !me.IsAttacking()))
                 {
 
@@ -80,7 +91,7 @@ namespace StormSpiritRewrite.Features
                     {
                         zip.SetLongZipPosition(this.Target);
                         zip.Use();
-                        Orbwalking.Attack(this.Target, true);
+                       // Orbwalking.Attack(this.Target, true);
                         Utils.Sleep(100, "zip");
                     }
                 }
@@ -129,6 +140,8 @@ namespace StormSpiritRewrite.Features
 
         public void ChaseZipDraw()
         {
+            this.targetFind.Find();
+            if (this.Target == null) return;
             if (Variables.InChaseZip)
             {
                 this.targetFind.DrawTarget();

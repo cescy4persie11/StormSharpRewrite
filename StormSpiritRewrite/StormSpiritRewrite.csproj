@@ -69,6 +69,7 @@
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Features\ChaseZip.cs" />
+    <Compile Include="Features\DrawText.cs" />
     <Compile Include="Features\Flee.cs" />
     <Compile Include="Features\InitiateCombo.cs" />
     <Compile Include="Features\ManaAbuse.cs" />

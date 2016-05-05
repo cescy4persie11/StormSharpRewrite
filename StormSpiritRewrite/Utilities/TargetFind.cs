@@ -68,7 +68,6 @@ namespace StormSpiritRewrite.Utilities
             {
                 return;
             }
-
             this.UnlockTarget();
             this.Target =
                 Heroes.GetByTeam(Variables.EnemyTeam)

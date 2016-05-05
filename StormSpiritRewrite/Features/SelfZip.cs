@@ -18,7 +18,7 @@ namespace StormSpiritRewrite.Utilities
 
         private Hero me;
 
-        private readonly ItemUsage itemUsage;
+        private ItemUsage itemUsage;
 
         private TargetFind targetFind;
 
@@ -41,14 +41,14 @@ namespace StormSpiritRewrite.Utilities
             this.itemUsage.UpdateItems();
             this.zip = Variables.Zip;
             this.me = Variables.Hero;
-            this.targetFind.Find();
+            //this.targetFind.Find();
         }
 
         public void Execute()
         {
             Update();
             if (!zip.CanBeCast()) return;
-            this.targetFind.Find();      
+            this.targetFind.Find();
             if (!this.AnyEnemyNearBy(1000))
             {        
                 if (Utils.SleepCheck("selfzip")) {
@@ -62,7 +62,9 @@ namespace StormSpiritRewrite.Utilities
                 if (this.Target == null) return;
                 var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
                 var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
-                var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");                               
+                var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
+                // mana efficiency
+                itemUsage.ManaEfficiency();                                     
                 // first self zip
                 if(!inPassive && !enemyHitByMyOverload)
                 {
@@ -178,6 +180,8 @@ namespace StormSpiritRewrite.Utilities
 
         public void SelfZipDraw()
         {
+            this.targetFind.Find();
+            if (this.Target == null) return;
             if (Variables.inSelfZip)
             {
                 this.targetFind.DrawTarget();

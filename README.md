@@ -17,5 +17,8 @@
 - Added Flee Mode
 - Now Combo will only select non-bkb hero.
 - Some spells are now more likely to be dodged(performance improvement)
+- Added Item Usage
+- Sheepstick is now chain-stun with Vortex in Combo
+
 
  

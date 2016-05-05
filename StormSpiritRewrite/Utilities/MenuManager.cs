@@ -10,21 +10,21 @@ namespace StormSpiritRewrite.Utilities
 {
     public class MenuManager
     {
-        private readonly MenuItem ChaseZipMenu;
+        public readonly MenuItem ChaseZipMenu;
 
-        private readonly MenuItem InitiateZipMenu;
+        public readonly MenuItem InitiateZipMenu;
 
-        private readonly MenuItem SelfZipMenu;
+        public readonly MenuItem SelfZipMenu;
 
         private readonly MenuItem LegacyOrQwerMenu;
 
-        private readonly Menu FleeMenu;
+        public readonly Menu FleeMenu;
 
-        private readonly MenuItem FleeHotKey;
+        public readonly MenuItem FleeHotKey;
 
         private readonly MenuItem FleeDistance;
 
-        private readonly MenuItem FleeTpEnabled;
+        public readonly MenuItem FleeTpEnabled;
 
         private readonly MenuItem DropManaItemMenu;
 
@@ -34,7 +34,7 @@ namespace StormSpiritRewrite.Utilities
 
         public MenuManager(string heroName)
         {
-            this.Menu = new Menu("LoneDruidSharp", "LoneDruidSharp", true, "npc_dota_hero_storm_spirit", true);
+            this.Menu = new Menu("StormSharp", "StormSharp", true, "npc_dota_hero_storm_spirit", true);
             this.LegacyOrQwerMenu = new MenuItem("Hotkey Setting", "Do you use LegacyHotkey?").SetValue(true).SetTooltip("Enable/Disable : Legacy/QWER");
             this.SelfZipMenu = new MenuItem("SelfZip", "SelfZip").SetValue(new KeyBind('W', KeyBindType.Press));
             this.ChaseZipMenu = new MenuItem("ChaseZipMenu", "ChaseZipMenu").SetValue(new KeyBind('F', KeyBindType.Press));
@@ -44,7 +44,7 @@ namespace StormSpiritRewrite.Utilities
             this.FleeMenu = new Menu("Flee mode settings", "Flee mode settings");
             this.FleeDistance = new MenuItem("FleeDistance", "FleeDistance").SetValue(new Slider(450, 400, 1000)).SetTooltip("zip distance in flee mode");
             this.FleeHotKey = new MenuItem("FleeHotkey", "FleeHotkey").SetValue(new KeyBind('C', KeyBindType.Press)).SetTooltip("press to zip towards fountain");
-            this.FleeTpEnabled = new MenuItem("FleeTpEnabled", "FleeTpEnabled").SetValue(new KeyBind('T', KeyBindType.Toggle)).SetTooltip("Enable Tp while zip-flee");
+            this.FleeTpEnabled = new MenuItem("FleeTpEnabled", "FleeTpEnabled").SetValue(new KeyBind('Y', KeyBindType.Toggle)).SetTooltip("Enable Tp while zip-flee");
             this.FleeMenu.AddItem(this.FleeHotKey);
             this.FleeMenu.AddItem(this.FleeTpEnabled);
             this.FleeMenu.AddItem(this.FleeDistance);

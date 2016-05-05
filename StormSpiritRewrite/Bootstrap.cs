@@ -19,7 +19,7 @@ namespace StormSpiritRewrite
         public void SubscribeEvents()
         {
             Events.OnLoad += this.Events_Onload;
-            //Events.OnClose += this.Events_OnClose;
+            Events.OnClose += this.Events_OnClose;
             Game.OnUpdate += this.Game_OnUpdate;
             Game.OnWndProc += this.Game_OnWndProc;
             Drawing.OnDraw += this.Drawing_OnDraw;

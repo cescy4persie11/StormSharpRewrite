@@ -24,7 +24,7 @@ namespace StormSpiritRewrite
 
         private readonly Sleeper dropItemSleeper;
 
-        private readonly ItemUsage itemUsage;
+        private ItemUsage itemUsage;
 
         private SelfZip selfZip;
 
@@ -35,6 +35,8 @@ namespace StormSpiritRewrite
         private ZipDodge zipDodge;
 
         private Flee flee;
+
+        private DrawText drawText;
 
         private ManaAbuse manaAbuse;
 
@@ -56,7 +58,6 @@ namespace StormSpiritRewrite
             this.initiateSleeper = new Sleeper();
             this.fleeSleeper = new Sleeper();
             this.dropItemSleeper = new Sleeper();
-            this.itemUsage = new ItemUsage();
             this.targetFind = new TargetFind();
         }
 
@@ -79,18 +80,28 @@ namespace StormSpiritRewrite
         public void OnClose()
         {
             this.pause = true;
+            if (Variables.MenuManager != null)
+            {
+                Variables.MenuManager.Menu.RemoveFromMainMenu();
+            }
+
             Variables.PowerTreadsSwitcher = null;
         }
 
         public void OnDraw()
         {
-            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            if (Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
             {
                 return;
             }
             selfZip.SelfZipDraw();
-            chaseZip.ChaseZipDraw();
-            initiateCombo.InitiateComboDraw();
+            //chaseZip.ChaseZipDraw();
+            //initiateCombo.InitiateComboDraw();
+            drawText.DrawTextChaseZip(Variables.InChaseZip);
+            drawText.DrawTextFlee(Variables.FleePress);
+            drawText.DrawTextSelfZip(Variables.inSelfZip);
+            drawText.DrawTextTpEnabled(Variables.TpEnabled);
+            drawText.DrawTextInitiate(Variables.InInitiateZip);
         }
 
         public void OnLoad()
@@ -108,7 +119,7 @@ namespace StormSpiritRewrite
             Variables.Remnant = new Remnant(Me.Spellbook.Spell1);
             Variables.Vortex = new Vortex(Me.Spellbook.Spell2);
             Variables.Zip = new Zip(Me.Spellbook.Spell4);
-            this.itemUsage.UpdateItems();
+            this.itemUsage = new ItemUsage();
             this.targetFind = new TargetFind();
             this.selfZip = new SelfZip();
             this.chaseZip = new ChaseZip();
@@ -116,6 +127,7 @@ namespace StormSpiritRewrite
             this.manaAbuse = new ManaAbuse();
             this.zipDodge = new ZipDodge();
             this.flee = new Flee();
+            this.drawText = new DrawText();
             this.manaDisplay = new ManaDisplay();
             //this.constants = new Constants();
 
