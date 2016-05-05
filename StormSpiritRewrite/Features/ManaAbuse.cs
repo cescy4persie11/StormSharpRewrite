@@ -96,11 +96,15 @@ namespace StormSpiritRewrite.Features
         private void DropItems(Hero me)
         {
             var items = me.Inventory.Items;
-            if (items.Where(x => !x.Equals("null") && isManaItem(x)) == null) return;
-            foreach (var item in items.Where(x => !x.Equals("null") && isManaItem(x)))
+            if (items.Where(x => isManaItem(x)) == null) return;
+            if (Utils.SleepCheck("drop"))
             {
-                SaveItemSlot(item);
-                me.DropItem(item, me.NetworkPosition, true);
+                foreach (var item in items.Where(x => isManaItem(x)))
+                {
+                    SaveItemSlot(item);
+                    me.DropItem(item, me.NetworkPosition, true);
+                }
+                Utils.Sleep(100, "drop");
             }
         }
 
@@ -122,7 +126,11 @@ namespace StormSpiritRewrite.Features
                 AbuseDroppedItem = true;
                 if (!me.NetworkActivity.Equals(NetworkActivity.Idle))
                 {
-                    me.Hold();
+                    if (Utils.SleepCheck("hold"))
+                    {
+                        me.Hold();
+                        Utils.Sleep(100, "hold");
+                    }
                 }
                 if (Utils.SleepCheck("drop"))
                 {

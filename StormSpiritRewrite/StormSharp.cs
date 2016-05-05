@@ -94,14 +94,32 @@ namespace StormSpiritRewrite
             {
                 return;
             }
-            selfZip.SelfZipDraw();
-            //chaseZip.ChaseZipDraw();
-            //initiateCombo.InitiateComboDraw();
+            //selfZip.SelfZipDraw(Target);
+            //chaseZip.ChaseZipDraw(Target);
+            //initiateCombo.InitiateComboDraw(Target);
+            
+
             drawText.DrawTextChaseZip(Variables.InChaseZip);
             drawText.DrawTextFlee(Variables.FleePress);
             drawText.DrawTextSelfZip(Variables.inSelfZip);
             drawText.DrawTextTpEnabled(Variables.TpEnabled);
             drawText.DrawTextInitiate(Variables.InInitiateZip);
+            if (this.Target == null) return;
+            if(Variables.InChaseZip)
+            {
+                chaseZip.DrawTarget(Target);
+            }else if (Variables.inSelfZip)
+            {
+                selfZip.DrawTarget(Target);
+            }else if (Variables.InInitiateZip)
+            {
+                initiateCombo.DrawTarget(Target);
+            }
+            
+            if (Variables.InInitiateZip || Variables.InChaseZip || Variables.inSelfZip)
+            {
+                this.targetFind.DrawTarget();
+            }
         }
 
         public void OnLoad()
@@ -144,9 +162,13 @@ namespace StormSpiritRewrite
                 return;
             }
 
-            selfZip.SelfZipPlayerExecution();
-            chaseZip.ChaseZipPlayerExecution();
-            initiateCombo.InitiateComboPlayerExecution();
+            //if (!Variables.inSelfZip && !Variables.InInitiateZip && !Variables.InChaseZip)
+            //{
+            //selfZip.SelfZipPlayerExecution();
+            //chaseZip.ChaseZipPlayerExecution();
+            //initiateCombo.InitiateComboPlayerExecution();
+            //}
+            this.targetFind.UnlockTarget();
             manaAbuse.ManaAbusePlayerExecution(args);
             manaDisplay.PlayerExecution_ManaDisplay();
 
@@ -168,7 +190,7 @@ namespace StormSpiritRewrite
             {
                 return;
             }
-
+            this.targetFind.Find();
             manaDisplay.Execute();
         }
 
@@ -189,7 +211,7 @@ namespace StormSpiritRewrite
             
             if (Variables.inSelfZip && CanAction)
             {         
-                selfZip.Execute();
+                selfZip.Execute(Target);
                 return;
             }
         }
@@ -211,7 +233,7 @@ namespace StormSpiritRewrite
 
             if (Variables.InChaseZip && CanAction)
             {
-                chaseZip.Execute();
+                chaseZip.Execute(Target);
                 return;
             }
         }
@@ -233,7 +255,7 @@ namespace StormSpiritRewrite
 
             if (Variables.InInitiateZip && CanAction)
             {
-                initiateCombo.Execute();
+                initiateCombo.Execute(Target);
                 return;
             }
         }

@@ -9,6 +9,7 @@ using Ensage.Common;
 using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
 using StormSpiritRewrite.Utilities;
+using SharpDX;
 
 namespace StormSpiritRewrite.Features
 {
@@ -22,8 +23,8 @@ namespace StormSpiritRewrite.Features
 
         private Hero me;
 
-        private readonly ItemUsage itemUsage;
-
+        private ItemUsage itemUsage;
+        /*
         private TargetFind targetFind;
 
         private Hero Target
@@ -33,34 +34,34 @@ namespace StormSpiritRewrite.Features
                 return this.targetFind.Target;
             }
         }
+        */
 
         public ChaseZip()
-        {
-            this.itemUsage = new ItemUsage();
-            this.targetFind = new TargetFind();
+        {  
+            //this.targetFind = new TargetFind();
             this.selfZip = new SelfZip();
         }
 
         public void Update()
         {
-            this.itemUsage.UpdateItems();
+            this.itemUsage = new ItemUsage();
             this.zip = Variables.Zip;
             this.remnant = Variables.Remnant;
             this.me = Variables.Hero;
             //this.targetFind.Find();
         }
 
-        public void Execute()
+        public void Execute(Hero target)
         {
             Update();
-            this.targetFind.Find();
-            if (this.Target == null) return;
+            //this.targetFind.Find();
+            if (target == null) return;
             var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
             var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
-            var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
+            var enemyHitByMyOverload = target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
             //Mana efficiency
             itemUsage.ManaEfficiency();
-
+            itemUsage.OffensiveItem(target);
             //var myAttackInAir = ObjectManager.TrackingProjectiles.Any(x => x.Source.Name == me.Name && x.Source.Team != me.GetEnemyTeam());
             //always try to cast remnant if it can hit anyone
             if (remnant.CanHitEnemyWithOutPull() && remnant.CanRemnant)
@@ -68,28 +69,32 @@ namespace StormSpiritRewrite.Features
                 if (Utils.SleepCheck("remnant"))
                 {
                     remnant.Use();
-                    Orbwalking.Attack(this.Target, true);
+                    Orbwalking.Attack(target, true);
                     Utils.Sleep(100, "remnant");
                 }
             }
 
             //Distance Closing with Long Zip
-            if (me.Distance2D(this.Target) > me.AttackRange + 100)
+            if (me.Distance2D(target) > me.AttackRange + 100)
             {
-                if (Orbwalking.AttackOnCooldown())
+                if (Utils.SleepCheck("orbwalk"))
                 {
-                    Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
+                    if (Orbwalking.AttackOnCooldown())
+                    {
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    }
+                    else
+                    {
+                        Orbwalking.Attack(target, true);
+                    }
+                    Utils.Sleep(100, "orbwalk");
                 }
-                else
-                {
-                    Orbwalking.Attack(this.Target, true);
-                }
-                if (!myAttackAlmostLand() && zip.CanBeCast() && (!inPassive || (inPassive && myAttackAlmostLand()) || !me.IsAttacking()))
+                if (zip.CanBeCast() && (!inPassive || (inPassive && !me.IsAttacking() && !myAttackAlmostLand(target))))
                 {
 
-                    if (Utils.SleepCheck("zip") && Prediction.StraightTime(this.Target) > 600)
+                    if (Utils.SleepCheck("zip"))
                     {
-                        zip.SetLongZipPosition(this.Target);
+                        zip.SetLongZipPosition(target);
                         zip.Use();
                        // Orbwalking.Attack(this.Target, true);
                         Utils.Sleep(100, "zip");
@@ -101,17 +106,21 @@ namespace StormSpiritRewrite.Features
                 //else is just selfZip
                 if (zip.NoManaForZip())
                 {
-                    if (Orbwalking.AttackOnCooldown())
+                    if (Utils.SleepCheck("orbwalk"))
                     {
-                        Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
-                    }
-                    else
-                    {
-                        Orbwalking.Attack(this.Target, true);
+                        if (Orbwalking.AttackOnCooldown())
+                        {
+                            Orbwalking.Orbwalk(target, 0, 0, false, true);
+                        }
+                        else
+                        {
+                            Orbwalking.Attack(target, true);
+                        }
+                        Utils.Sleep(100, "orbwalk");
                     }
                 }
                 else {
-                    selfZip.Execute();
+                    selfZip.Execute(target);
                 }
             }
 
@@ -126,25 +135,25 @@ namespace StormSpiritRewrite.Features
                             && x.Distance2D(Variables.Hero.Position) <= range);
         }
 
-        private bool myAttackAlmostLand()
+        private bool myAttackAlmostLand(Hero target)
         {
             var myProjectiles = ObjectManager.TrackingProjectiles.Where(x => x.Source.Name == me.Name && x.Source.Team != me.GetEnemyTeam());
             if (myProjectiles == null) return false;
-            return myProjectiles.Any(x => this.Target.Distance2D(x.Position) < 300);
+            return myProjectiles.Any(x => target.Distance2D(x.Position) < 300);
         }
 
         public void ChaseZipPlayerExecution()
         {
-            this.targetFind.UnlockTarget();
+            //this.targetFind.UnlockTarget();
         }
 
-        public void ChaseZipDraw()
+        public void ChaseZipDraw(Hero target)
         {
-            this.targetFind.Find();
-            if (this.Target == null) return;
+            //this.targetFind.Find();
+            if (target == null) return;
             if (Variables.InChaseZip)
             {
-                this.targetFind.DrawTarget();
+                //this.targetFind.DrawTarget();
             }
         }
 
@@ -157,5 +166,17 @@ namespace StormSpiritRewrite.Features
                                 x.Team == me.GetEnemyTeam() && !x.IsIllusion && x.IsAlive && x.IsVisible
                                 && x.Distance2D(me.Position) <= 100 && !x.IsMagicImmune());
         }
+
+        public void DrawTarget(Hero target)
+        {
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.7));
+            var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
+            var size = new Vector2(50, 50);
+            Drawing.DrawRect(startPos, size + new Vector2(13, -6),
+                Drawing.GetTexture(name));
+            Drawing.DrawRect(startPos, size + new Vector2(14, -5),
+                                    new Color(0, 0, 0, 255), true);
+        }
+
     }
 }

@@ -74,7 +74,7 @@ namespace StormSpiritRewrite.Utilities
                     .Where(
                         x =>
                         x.IsValid && x.IsAlive && !x.IsIllusion && x.IsVisible
-                        && x.Distance2D(Game.MousePosition) < 2000)
+                        && x.Distance2D(Game.MousePosition) < 1000)
                     .MinOrDefault(x => x.Distance2D(Game.MousePosition));
             LockTarget();
             this.sleeper.Sleep(100);

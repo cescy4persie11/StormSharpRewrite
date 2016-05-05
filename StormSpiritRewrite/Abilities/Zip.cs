@@ -123,6 +123,7 @@ namespace StormSpiritRewrite.Abilities
 
         public void SetLongZipPosition(Hero target)
         {
+
             this.zipPosition = Variables.Hero.Spellbook.SpellR.GetPrediction(target);
         }
 

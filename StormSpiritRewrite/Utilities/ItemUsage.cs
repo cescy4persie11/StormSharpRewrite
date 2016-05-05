@@ -174,6 +174,9 @@ namespace StormSpiritRewrite.Utilities
         {
             UseVeil(target);
             SheepStick(target);
+            Orchid(target);
+            Bloodthorn(target);
+
         }
 
 

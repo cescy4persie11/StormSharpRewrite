@@ -8,6 +8,7 @@ using Ensage;
 using Ensage.Common;
 using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
+using SharpDX;
 
 namespace StormSpiritRewrite.Utilities
 {
@@ -20,6 +21,7 @@ namespace StormSpiritRewrite.Utilities
 
         private ItemUsage itemUsage;
 
+        /*
         private TargetFind targetFind;
 
         private Hero Target
@@ -29,11 +31,11 @@ namespace StormSpiritRewrite.Utilities
                 return this.targetFind.Target;
             }
         }
-
+        */
         public SelfZip()
         {
             this.itemUsage = new ItemUsage();
-            this.targetFind = new TargetFind();
+           // this.targetFind = new TargetFind();
         }
 
         public void Update()
@@ -44,25 +46,28 @@ namespace StormSpiritRewrite.Utilities
             //this.targetFind.Find();
         }
 
-        public void Execute()
+        public void Execute(Hero target)
         {
             Update();
             if (!zip.CanBeCast()) return;
-            this.targetFind.Find();
-            if (!this.AnyEnemyNearBy(1000))
+            //this.targetFind.Find();
+            if (target == null)
             {        
                 if (Utils.SleepCheck("selfzip")) {
                     zip.SetStaticSelfZipPosition();
                     zip.Use();
+                    Orbwalking.Attack(target, true);
                     Utils.Sleep(1000, "selfzip");
                 }
+                return;
             }
             else
             {
-                if (this.Target == null) return;
+                if (target == null) return;
+                
                 var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
                 var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
-                var enemyHitByMyOverload = this.Target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
+                var enemyHitByMyOverload = target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
                 // mana efficiency
                 itemUsage.ManaEfficiency();                                     
                 // first self zip
@@ -72,26 +77,30 @@ namespace StormSpiritRewrite.Utilities
                     {
                         zip.SetDynamicSelfZipPosition();
                         zip.Use();
-                        Orbwalking.Attack(this.Target, true);
+                        Orbwalking.Attack(target, true);
                         Utils.Sleep(500, "selfzip");
                         return;
                     }
                     
                 }else 
                 //subsequent zips                                       
-                if (me.Distance2D(this.Target) < 300)
+                if (me.Distance2D(target) < 300)
                 {
                     // orbwalk
                     if (inPassive)
                     {
-                        //orbwalk
-                        if (Orbwalking.AttackOnCooldown())
+                        if (Utils.SleepCheck("orbwalk"))
                         {
-                            Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
-                        }
-                        else
-                        {
-                            Orbwalking.Attack(this.Target, true);
+                            //orbwalk
+                            if (Orbwalking.AttackOnCooldown())
+                            {
+                                Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            }
+                            else
+                            {
+                                Orbwalking.Attack(target, true);
+                            }
+                            Utils.Sleep(100, "orbwalk");
                         }
                     }
                     //if < 300, rezip after attack lands   
@@ -102,54 +111,63 @@ namespace StormSpiritRewrite.Utilities
                         {
                             zip.SetDynamicSelfZipPosition();
                             zip.Use();
-                            Orbwalking.Attack(this.Target, true);
+                            Orbwalking.Attack(target, true);
                             Utils.Sleep(500, "selfzip");
                         }
                     }
                 }
                 else //> 300
                 {
-                    if (me.Distance2D(this.Target) < me.AttackRange + 50)
+                    if (me.Distance2D(target) < me.AttackRange + 100)
                     {
                         if (inPassive)
                         {
-                            //orbwalk
-                            if (Orbwalking.AttackOnCooldown())
+                            if (Utils.SleepCheck("orbwalk"))
                             {
-                                Orbwalking.Orbwalk(this.Target, 0, 0, false, true);
-                            }
-                            else
-                            {
-                                Orbwalking.Attack(this.Target, true);
-                            }
-                        }
-
-                        if (myAttackAlmostLand())
-                        {
-                            if (Utils.SleepCheck("selfzip"))
-                            {
-                                zip.SetDynamicSelfZipPosition();
-                                zip.Use();
-                                Orbwalking.Attack(this.Target, true);
-                                Utils.Sleep(500, "selfzip");
+                                //orbwalk
+                                if (Orbwalking.AttackOnCooldown())
+                                {
+                                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                                }
+                                else
+                                {
+                                    Orbwalking.Attack(target, true);
+                                }
+                                Utils.Sleep(100, "orbwalk");
                             }
                         }
-                        else
-                        {
-                            // attack not dispatched, > 300
-                            // if in attack range
-
-                            //still provide the short distance case to do rezip, but only within attack range
-                            if (enemyHitByMyOverload && !inPassive)
+                        try {
+                            if (myAttackAlmostLand(target))
                             {
                                 if (Utils.SleepCheck("selfzip"))
                                 {
                                     zip.SetDynamicSelfZipPosition();
                                     zip.Use();
-                                    Orbwalking.Attack(this.Target, true);
+                                    Orbwalking.Attack(target, true);
                                     Utils.Sleep(500, "selfzip");
                                 }
                             }
+                            else
+                            {
+                                // attack not dispatched, > 300
+                                // if in attack range
+
+                                //still provide the short distance case to do rezip, but only within attack range
+                                if (enemyHitByMyOverload && !inPassive)
+                                {
+                                    if (Utils.SleepCheck("selfzip"))
+                                    {
+                                        zip.SetDynamicSelfZipPosition();
+                                        zip.Use();
+                                        Orbwalking.Attack(target, true);
+                                        Utils.Sleep(500, "selfzip");
+                                    }
+                                }
+
+                            }
+                        }
+                        catch
+                        {
 
                         }
                     }       
@@ -166,26 +184,39 @@ namespace StormSpiritRewrite.Utilities
                             && x.Distance2D(Variables.Hero.Position) <= range);
         }
 
-        private bool myAttackAlmostLand()
+        private bool myAttackAlmostLand(Hero target)
         {
-            var myProjectiles = ObjectManager.TrackingProjectiles.Where(x => x.Source.Name == me.Name && x.Source.Team != me.GetEnemyTeam());
+            var myProjectiles = ObjectManager.TrackingProjectiles.Where(x => x.Source.Name == me.Name);
             if (myProjectiles == null) return false;
-            return myProjectiles.Any(x => this.Target.Distance2D(x.Position) < 300);
+            if (target == null) return false;
+            return myProjectiles.Any(x => target.Distance2D(x.Position) < 300);
         }
 
         public void SelfZipPlayerExecution()
         {
-            this.targetFind.UnlockTarget();
+            //this.targetFind.UnlockTarget();
         }
 
-        public void SelfZipDraw()
+        public void SelfZipDraw(Hero target)
         {
-            this.targetFind.Find();
-            if (this.Target == null) return;
+            //this.targetFind.Find();
+            if (target == null) return;
             if (Variables.inSelfZip)
             {
-                this.targetFind.DrawTarget();
+               // this.targetFind.DrawTarget();
             }
+        }
+
+        public void DrawTarget(Hero target)
+        {
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.7));
+            var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
+            var size = new Vector2(50, 50);
+            Drawing.DrawRect(startPos, size + new Vector2(13, -6),
+                Drawing.GetTexture(name));
+            Drawing.DrawRect(startPos, size + new Vector2(14, -5),
+                                    new Color(0, 0, 0, 255), true);
+
         }
     }
 }
