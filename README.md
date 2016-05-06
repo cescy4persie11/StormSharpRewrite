@@ -1,4 +1,10 @@
 # StormSharp
+
+---------------------------------
+Full Credits to my reference to Moones Assembly 
+@BreakerSharp & @Ability https://github.com/Moones/EnsageSharp
+---------------------------------
+
 05/02/2016
 - Rewrite StormSharp for performance and bug fixes
 - Support Smart SelfZip(Press) 
