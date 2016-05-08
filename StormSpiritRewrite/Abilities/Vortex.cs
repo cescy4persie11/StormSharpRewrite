@@ -39,6 +39,11 @@ namespace StormSpiritRewrite.Abilities
                    && !target.IsLinkensProtected() && !target.IsInvul() && !target.IsMagicImmune();
         }
 
+        public bool isLearnt()
+        {
+            return this.ability.Level > 0;
+        }
+
         public bool CanbeCasted()
         {
             return this.ability.CanBeCasted();
@@ -52,6 +57,11 @@ namespace StormSpiritRewrite.Abilities
         public bool inVortex()
         {
             return this.ability.Cooldown < 22 - this.ability.Level && this.ability.Cooldown > 20.5 - this.ability.Level;
+        }
+
+        public bool JustFinishedFirstRemnant()
+        {
+            return this.ability.Cooldown > 21 - this.ability.Level;
         }
 
         public bool inCoolDown()

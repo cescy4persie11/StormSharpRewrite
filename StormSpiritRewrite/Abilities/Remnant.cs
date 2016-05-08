@@ -41,6 +41,14 @@ namespace StormSpiritRewrite.Abilities
             }
         }
 
+        public bool isInCoolDown
+        {
+            get
+            {
+                return this.ability.Cooldown != 0 && this.ability.CanBeCasted();
+            }
+        }
+
         public bool CanHitEnemyWithOutPull()
         {
             return ObjectManager.GetEntities<Hero>()
@@ -54,11 +62,23 @@ namespace StormSpiritRewrite.Abilities
         {
             if (Utils.SleepCheck("remnant"))
             {
+                this.SwitchTread();
                 this.ability.UseAbility();
                 Utils.Sleep(100, "remnant");
             }
         }
 
+        public void SwitchTread()
+        {
+            if (Variables.PowerTreadsSwitcher != null && Variables.PowerTreadsSwitcher.IsValid
+                && Variables.Hero.Health > 300)
+            {
+                Variables.PowerTreadsSwitcher.SwitchTo(
+                    Ensage.Attribute.Intelligence,
+                    Variables.PowerTreadsSwitcher.PowerTreads.ActiveAttribute,
+                    false);
+            }
+        }
 
 
 

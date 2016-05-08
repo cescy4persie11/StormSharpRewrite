@@ -143,11 +143,11 @@ namespace StormSpiritRewrite.Abilities
         public void Use()
         {
             if (!this.CanBeCast()) return;        
-            if (Utils.SleepCheck("zip"))
+            if (Utils.SleepCheck("zip0"))
             {
                 this.SwitchTread();
                 this.ability.UseAbility(this.zipPosition);
-                Utils.Sleep(100, "zip");
+                Utils.Sleep(100, "zip0");
             }
         }
 

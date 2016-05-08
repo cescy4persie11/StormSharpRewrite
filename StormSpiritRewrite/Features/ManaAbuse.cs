@@ -144,7 +144,7 @@ namespace StormSpiritRewrite.Features
                     {
                         SwitchTreadToStr();
                         soulRing.UseAbility();
-                        Utils.Sleep(100, "soulring");
+                        Utils.Sleep(200, "soulring");
                     }
                 }
             }

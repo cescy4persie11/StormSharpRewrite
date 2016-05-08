@@ -51,7 +51,7 @@ namespace StormSpiritRewrite.Utilities
             if (Utils.SleepCheck("soulring"))
             {
                 soulRing.UseAbility();
-                Utils.Sleep(100, "soulring");
+                Utils.Sleep(200, "soulring");
             }
         }
 
@@ -176,7 +176,18 @@ namespace StormSpiritRewrite.Utilities
             SheepStick(target);
             Orchid(target);
             Bloodthorn(target);
+        }
 
+        public void SwitchTreadToStr()
+        {
+            if (Variables.PowerTreadsSwitcher != null && Variables.PowerTreadsSwitcher.IsValid
+                && Variables.Hero.Health > 300)
+            {
+                Variables.PowerTreadsSwitcher.SwitchTo(
+                    Ensage.Attribute.Strength,
+                    Variables.PowerTreadsSwitcher.PowerTreads.ActiveAttribute,
+                    false);
+            }
         }
 
 

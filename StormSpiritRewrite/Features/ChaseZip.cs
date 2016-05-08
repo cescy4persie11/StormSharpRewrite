@@ -15,26 +15,33 @@ namespace StormSpiritRewrite.Features
 {
     public class ChaseZip
     {
-        private Zip zip;
-
-        private SelfZip selfZip;
-
-        private Remnant remnant;
-
-        private Hero me;
-
-        private ItemUsage itemUsage;
-        /*
-        private TargetFind targetFind;
-
-        private Hero Target
+        private Zip zip
         {
             get
             {
-                return this.targetFind.Target;
+                return Variables.Zip;
             }
         }
-        */
+
+        private SelfZip selfZip;
+
+        private Remnant remnant
+        {
+            get
+            {
+                return Variables.Remnant;
+            }
+        }
+
+        private Hero me
+        {
+            get
+            {
+                return Variables.Hero;
+            }
+        }
+
+        private ItemUsage itemUsage;
 
         public ChaseZip()
         {  
@@ -45,9 +52,6 @@ namespace StormSpiritRewrite.Features
         public void Update()
         {
             this.itemUsage = new ItemUsage();
-            this.zip = Variables.Zip;
-            this.remnant = Variables.Remnant;
-            this.me = Variables.Hero;
             //this.targetFind.Find();
         }
 
@@ -60,8 +64,12 @@ namespace StormSpiritRewrite.Features
             var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
             var enemyHitByMyOverload = target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
             //Mana efficiency
+            
             itemUsage.ManaEfficiency();
-            itemUsage.OffensiveItem(target);
+            if (inUltimate || inPassive)
+            {
+                itemUsage.OffensiveItem(target);
+            }
             //var myAttackInAir = ObjectManager.TrackingProjectiles.Any(x => x.Source.Name == me.Name && x.Source.Team != me.GetEnemyTeam());
             //always try to cast remnant if it can hit anyone
             if (remnant.CanHitEnemyWithOutPull() && remnant.CanRemnant)
@@ -69,7 +77,7 @@ namespace StormSpiritRewrite.Features
                 if (Utils.SleepCheck("remnant"))
                 {
                     remnant.Use();
-                    Orbwalking.Attack(target, true);
+                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(100, "remnant");
                 }
             }
@@ -79,14 +87,8 @@ namespace StormSpiritRewrite.Features
             {
                 if (Utils.SleepCheck("orbwalk"))
                 {
-                    if (Orbwalking.AttackOnCooldown())
-                    {
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
-                    }
-                    else
-                    {
-                        Orbwalking.Attack(target, true);
-                    }
+                    if (target == null) return;
+                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(100, "orbwalk");
                 }
                 if (zip.CanBeCast() && (!inPassive || (inPassive && !me.IsAttacking() && !myAttackAlmostLand(target))))
@@ -96,7 +98,7 @@ namespace StormSpiritRewrite.Features
                     {
                         zip.SetLongZipPosition(target);
                         zip.Use();
-                       // Orbwalking.Attack(this.Target, true);
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
                         Utils.Sleep(100, "zip");
                     }
                 }
@@ -108,14 +110,7 @@ namespace StormSpiritRewrite.Features
                 {
                     if (Utils.SleepCheck("orbwalk"))
                     {
-                        if (Orbwalking.AttackOnCooldown())
-                        {
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
-                        }
-                        else
-                        {
-                            Orbwalking.Attack(target, true);
-                        }
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
                         Utils.Sleep(100, "orbwalk");
                     }
                 }
@@ -169,7 +164,7 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTarget(Hero target)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.7));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.65));
             var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
             var size = new Vector2(50, 50);
             Drawing.DrawRect(startPos, size + new Vector2(13, -6),

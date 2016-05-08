@@ -68,6 +68,7 @@
     <Compile Include="Abilities\Zip.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Features\AntiHeros.cs" />
     <Compile Include="Features\ChaseZip.cs" />
     <Compile Include="Features\DrawText.cs" />
     <Compile Include="Features\Flee.cs" />

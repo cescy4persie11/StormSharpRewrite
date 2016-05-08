@@ -56,15 +56,13 @@ namespace StormSpiritRewrite.Utilities
                 if (Utils.SleepCheck("selfzip")) {
                     zip.SetStaticSelfZipPosition();
                     zip.Use();
-                    Orbwalking.Attack(target, true);
+                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(1000, "selfzip");
                 }
                 return;
             }
             else
             {
-                if (target == null) return;
-                
                 var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
                 var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
                 var enemyHitByMyOverload = target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
@@ -77,7 +75,7 @@ namespace StormSpiritRewrite.Utilities
                     {
                         zip.SetDynamicSelfZipPosition();
                         zip.Use();
-                        Orbwalking.Attack(target, true);
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
                         Utils.Sleep(500, "selfzip");
                         return;
                     }
@@ -92,14 +90,8 @@ namespace StormSpiritRewrite.Utilities
                         if (Utils.SleepCheck("orbwalk"))
                         {
                             //orbwalk
-                            if (Orbwalking.AttackOnCooldown())
-                            {
-                                Orbwalking.Orbwalk(target, 0, 0, false, true);
-                            }
-                            else
-                            {
-                                Orbwalking.Attack(target, true);
-                            }
+                            if (target == null) return;
+                            Orbwalking.Orbwalk(target, 0, 0, false, true);
                             Utils.Sleep(100, "orbwalk");
                         }
                     }
@@ -111,7 +103,7 @@ namespace StormSpiritRewrite.Utilities
                         {
                             zip.SetDynamicSelfZipPosition();
                             zip.Use();
-                            Orbwalking.Attack(target, true);
+                            Orbwalking.Orbwalk(target, 0, 0, false, true);
                             Utils.Sleep(500, "selfzip");
                         }
                     }
@@ -125,14 +117,8 @@ namespace StormSpiritRewrite.Utilities
                             if (Utils.SleepCheck("orbwalk"))
                             {
                                 //orbwalk
-                                if (Orbwalking.AttackOnCooldown())
-                                {
-                                    Orbwalking.Orbwalk(target, 0, 0, false, true);
-                                }
-                                else
-                                {
-                                    Orbwalking.Attack(target, true);
-                                }
+                                if (target == null) return;
+                                Orbwalking.Orbwalk(target, 0, 0, false, true);
                                 Utils.Sleep(100, "orbwalk");
                             }
                         }
@@ -143,7 +129,7 @@ namespace StormSpiritRewrite.Utilities
                                 {
                                     zip.SetDynamicSelfZipPosition();
                                     zip.Use();
-                                    Orbwalking.Attack(target, true);
+                                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                                     Utils.Sleep(500, "selfzip");
                                 }
                             }
@@ -159,7 +145,7 @@ namespace StormSpiritRewrite.Utilities
                                     {
                                         zip.SetDynamicSelfZipPosition();
                                         zip.Use();
-                                        Orbwalking.Attack(target, true);
+                                        Orbwalking.Orbwalk(target, 0, 0, false, true);
                                         Utils.Sleep(500, "selfzip");
                                     }
                                 }
@@ -209,7 +195,7 @@ namespace StormSpiritRewrite.Utilities
 
         public void DrawTarget(Hero target)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.7));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.65));
             var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
             var size = new Vector2(50, 50);
             Drawing.DrawRect(startPos, size + new Vector2(13, -6),

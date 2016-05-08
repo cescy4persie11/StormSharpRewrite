@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StormSpiritRewrite.Abilities;
+﻿using StormSpiritRewrite.Abilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,30 +15,47 @@ namespace StormSpiritRewrite.Features
 {
     public class InitiateCombo
     {
-        private Zip zip;
+        private Zip zip
+        {
+            get
+            {
+                return Variables.Zip;
+            }
+        }
 
         private ChaseZip chaseZip;
 
-        private Remnant remnant;
+        private Remnant remnant
+        {
+            get
+            {
+                return Variables.Remnant;
+            }
+        }
 
-        private Vortex vortex;
+        private Vortex vortex
+        {
+            get
+            {
+                return Variables.Vortex;
 
-        private Hero me;
+            }
+        }
+
+        private Hero me
+        {
+            get
+            {
+                return Variables.Hero;
+            }
+        }
 
         private bool HexInitiate;
 
         private ItemUsage itemUsage;
-        /*
-        private TargetFind targetFind;
 
-        private Hero Target
-        {
-            get
-            {
-                return this.targetFind.Target;
-            }
-        }
-        */
+        private ParticleEffect meToTargetParticleEffect;
+        
         public InitiateCombo()
         {
             
@@ -52,10 +66,6 @@ namespace StormSpiritRewrite.Features
         public void Update()
         {
             this.itemUsage = new ItemUsage();
-            this.zip = Variables.Zip;
-            this.vortex = Variables.Vortex;
-            this.remnant = Variables.Remnant;
-            this.me = Variables.Hero;
             //this.targetFind.Find();
         }
 
@@ -67,8 +77,17 @@ namespace StormSpiritRewrite.Features
             var inUltimate = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_ball_lightning");
             var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
             // Mana Effiency
+            
             itemUsage.ManaEfficiency();
-            itemUsage.OffensiveItem(target);
+            if (inUltimate || (inPassive && (remnant.isInCoolDown || vortex.inCoolDown())))
+            {
+                itemUsage.OffensiveItem(target);
+            }
+            if (!vortex.isLearnt())
+            {
+                chaseZip.Execute(target);
+                return;
+            }
             //vortex in cooldown -> not initiate yet
             if (!vortex.inCoolDown())
             {
@@ -78,18 +97,21 @@ namespace StormSpiritRewrite.Features
                     //first zip
                     if(zip.CanBeCast() && (!inPassive || (inPassive && myAttackAlmostLand(target)) || !me.IsAttacking()))
                     {
-                        zip.SetLongZipPosition(target);
-                        zip.Use();
-                        if (Orbwalking.AttackOnCooldown())
+                        if (Utils.SleepCheck("longzip"))
                         {
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            zip.SetLongZipPosition(target);
+                            zip.Use();
+                            //Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            Utils.Sleep(100, "longzip");
                         }
-                        else
-                        {
-                            Orbwalking.Attack(target, true);
-                        }
-                        //Orbwalking.Attack(this.Target, true);
-                        Utils.Sleep(100, "zip");
+                    }
+                }
+                if (inUltimate)
+                {
+                    if (Utils.SleepCheck("attack"))
+                    {
+                        me.Attack(target);
+                        Utils.Sleep(100, "attack");
                     }
                 }
                 //pull
@@ -98,46 +120,55 @@ namespace StormSpiritRewrite.Features
                     if (Utils.SleepCheck("pull"))
                     {
                         vortex.UseOn(target);
-                        if (Orbwalking.AttackOnCooldown())
-                        {
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
-                        }
-                        else
-                        {
-                            Orbwalking.Attack(target, true);
-                        }
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
                         //Orbwalking.Attack(Target, true);
-                        Utils.SleepCheck("pull");
+                        Utils.Sleep(100, "pull");
                     }
                 }
             }
             else //vortex in cooldown
             {
-                if (Orbwalking.AttackOnCooldown())
-                {
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
-                }
-                else
-                {
-                    Orbwalking.Attack(target, true);
-                }
                 // first remnant land
                 if (vortex.inVortex())
                 {
-                    
                     if (!inPassive && remnant.CanRemnant)
                     {
                         if (Utils.SleepCheck("remnant"))
                         {
                             remnant.Use();
-                            Orbwalking.Attack(target, true);
                             Utils.Sleep(100, "remnant");
                         }
                     }
+
+                    if (Utils.SleepCheck("Remant attack"))
+                    {
+                        if (Orbwalking.AttackOnCooldown() && Orbwalking.CanCancelAnimation())
+                        {
+                            //Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            me.Attack(target);
+                        }
+                        else
+                        {
+                            me.Attack(target);
+                        }
+                        Utils.Sleep(100, "Remant attack");
+                    }
+
                 }
                 else
-                {                  
-                    chaseZip.Execute(target);
+                {
+                    if (vortex.JustFinishedFirstRemnant() && inPassive)
+                    {
+                        if (Utils.SleepCheck("attack"))
+                        {
+                            me.Attack(target);
+                            Utils.Sleep(100, "attack");
+                        }
+                    }
+                    else
+                    {
+                        chaseZip.Execute(target);
+                    }          
                 }
             }
         }
@@ -166,7 +197,7 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTarget(Hero target)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 110, Convert.ToSingle(Drawing.Height * 0.7));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 110, Convert.ToSingle(Drawing.Height * 0.65));
             var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
             var size = new Vector2(50, 50);
             Drawing.DrawRect(startPos, size + new Vector2(13, -6),
@@ -174,6 +205,43 @@ namespace StormSpiritRewrite.Features
             Drawing.DrawRect(startPos, size + new Vector2(14, -5),
                                     new Color(0, 0, 0, 255), true);
         }
+
+        public void DrawParticleEffect(Hero target)
+        {
+            if (target == null) return;
+            if (meToTargetParticleEffect == null)
+            {
+                meToTargetParticleEffect = new ParticleEffect(@"particles\ui_mouseactions\range_finder_tower_aoe.vpcf", target);     //target inditcator
+                meToTargetParticleEffect.SetControlPoint(2, new Vector3(Variables.Hero.Position.X, Variables.Hero.Position.Y, Variables.Hero.Position.Z));             //start point XYZ
+                meToTargetParticleEffect.SetControlPoint(6, new Vector3(1, 0, 0));                                                    // 1 means the particle is visible
+                meToTargetParticleEffect.SetControlPoint(7, new Vector3(target.Position.X, target.Position.Y, target.Position.Z)); //end point XYZ
+            }
+            else //updating positions
+            {
+                meToTargetParticleEffect.SetControlPoint(2, new Vector3(Variables.Hero.Position.X, Variables.Hero.Position.Y, Variables.Hero.Position.Z));
+                meToTargetParticleEffect.SetControlPoint(6, new Vector3(1, 0, 0));
+                meToTargetParticleEffect.SetControlPoint(7, new Vector3(target.Position.X, target.Position.Y, target.Position.Z));
+            }
+        }
+
+        public void PlayerExecution(Hero target)
+        {
+            if ((target == null || !target.IsAlive || !target.IsValid) && meToTargetParticleEffect != null)
+            {
+                meToTargetParticleEffect.Dispose();
+                meToTargetParticleEffect = null;
+            }
+        }
+
+        public void DisableParticleEffect()
+        {
+            if (meToTargetParticleEffect != null)
+            {
+                meToTargetParticleEffect.Dispose();
+                meToTargetParticleEffect = null;
+            }
+        }
+
 
     }
 }

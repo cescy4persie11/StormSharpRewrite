@@ -26,5 +26,15 @@ Full Credits to my reference to Moones Assembly
 - Added Item Usage
 - Sheepstick is now chain-stun with Vortex in Combo
 
+05/08/2016
+- Added Particle Effects
+- Added Anti Hero mode, it will zip away from danger. Cases include:
+-- Antimage blinks to vicinity
+-- Slardar blinks to Crush range with Crush off cooldown
+-- Axe blinks to Call Range with Call off cooldown
+- Adjust to orbwalk to make attack more smooth in Combo
+- Side Menu Helper only shows Combo, Flee, and Tp-Enabled hotkeys.
+- Mana Abuse will use Soul Ring on Strength Powertread.
+- Combo now supports cases where Vortex is not leveled up. 
 
  

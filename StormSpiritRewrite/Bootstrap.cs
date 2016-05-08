@@ -67,6 +67,7 @@ namespace StormSpiritRewrite
 
         private void Game_OnUpdate(EventArgs args)
         {
+            this.stormsharp.OnUpdate_AntiHeros();
             this.stormsharp.OnUpdate_SelfZip();
             this.stormsharp.OnUpdate_ChaseZip();
             this.stormsharp.OnUpdate_InitiateCombo();
@@ -74,6 +75,7 @@ namespace StormSpiritRewrite
             this.stormsharp.OnUpdate_ZipDodge();
             this.stormsharp.OnUpdate_Flee();
             this.stormsharp.OnUpdate();
+            
         }
 
         private void Game_OnWndProc(WndEventArgs args)

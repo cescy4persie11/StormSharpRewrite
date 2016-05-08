@@ -74,7 +74,7 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTextSelfZip(bool on)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.5));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.46));
 
             this.text = "SelfZip" + " [" + Utils.KeyToText(Variables.MenuManager.SelfZipMenu.GetValue<KeyBind>().Key) + "] " + (on ? "ON" : "OFF");
             this.Position = startPos;
@@ -86,7 +86,7 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTextChaseZip(bool on)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.54));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.50));
 
             this.text = "Chase" + " [" + Utils.KeyToText(Variables.MenuManager.ChaseZipMenu.GetValue<KeyBind>().Key) + "] " + (on ? "ON" : "OFF");
             this.Position = startPos;
@@ -98,19 +98,19 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTextInitiate(bool on)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.58));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.54));
 
             this.text = "Combo" + " [" + Utils.KeyToText(Variables.MenuManager.InitiateZipMenu.GetValue<KeyBind>().Key) + "] " + (on ? "ON" : "OFF");
             this.Position = startPos;
             this.textSize = new Vector2(20);
-            this.Color = !on ? Color.Red : Color.Yellow;
+            this.Color = !on ? Color.Red : Color.GreenYellow;
             this.FontFlags = FontFlags.AntiAlias | FontFlags.DropShadow | FontFlags.Additive | FontFlags.Custom | FontFlags.StrikeOut;
             this.Draw();
         }
 
         public void DrawTextFlee(bool on)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.62));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.58));
 
             this.text = "Flee" + " [" + Utils.KeyToText(Variables.MenuManager.FleeHotKey.GetValue<KeyBind>().Key) + "] " + Variables.MenuManager.TpDistance;
             this.Position = startPos;
@@ -122,12 +122,12 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTextTpEnabled(bool on)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.66));
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.62));
 
             this.text = "TP" + " [" + Utils.KeyToText(Variables.MenuManager.FleeTpEnabled.GetValue<KeyBind>().Key) + "] " + (on ? "ON" : "OFF");
             this.Position = startPos;
             this.textSize = new Vector2(20);
-            this.Color = !on ? Color.Red : Color.Green;
+            this.Color = !on ? Color.Red : Color.GreenYellow;
             this.FontFlags = FontFlags.AntiAlias | FontFlags.DropShadow | FontFlags.Additive | FontFlags.Custom | FontFlags.StrikeOut;
             this.Draw();
         }

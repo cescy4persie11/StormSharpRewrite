@@ -16,7 +16,13 @@ namespace StormSpiritRewrite.Features
 {
     public class ZipDodge
     {
-        private Zip zip;
+        private Zip zip
+        {
+            get
+            {
+                return Variables.Zip;
+            }
+        }
 
         private Hero me
         {
@@ -41,6 +47,12 @@ namespace StormSpiritRewrite.Features
                              "doom_bringer_doom", "beastmaster_primal_roar", "bane_fiends_grip"
                         };
 
+        private static List<string> SpecialDodgeableSpells = new List<string>
+                        {
+                             "nevermore_shadowraze1", "nevermore_shadowraze2", "nevermore_shadowraze3",
+                             "centaur_hoof_stomp", "lion_finger_of_death", "lina_laguna_blade"
+                        };
+
 
         public ZipDodge()
         {
@@ -49,7 +61,6 @@ namespace StormSpiritRewrite.Features
 
         private void Update()
         {
-            this.zip = Variables.Zip;
         }
 
         public void SelfZipDodgeExecute()
@@ -101,8 +112,19 @@ namespace StormSpiritRewrite.Features
 
         public void SpecialZipDodgeExecute()
         {
+            Update();
+            if (!zip.CanBeCast()) return;
+            var AllEnemyHeroes = ObjectManager.GetEntities<Hero>()
+                    .Where(
+                        x =>
+                            x.Team == Variables.Hero.GetEnemyTeam() && !x.IsIllusion && x.IsAlive && x.IsVisible
+                            && x.Distance2D(Variables.Hero.Position) <= 1000);
+            if (AllEnemyHeroes == null) return;
+            //Riki is dodged upon attack
+            var AnyHeroCastingDodgeableSpell = AllEnemyHeroes.Any<Hero>(hero => hero.ClassID != ClassID.CDOTA_Unit_Hero_Riki && hero.Spellbook.Spells.Any<Ability>(x => x.IsInAbilityPhase && SpecialDodgeableSpells.Exists(spell => spell == x.Name)));          
+            if (!AnyHeroCastingDodgeableSpell) return;
             Centaur();
-            DeathProphet();
+            //DeathProphet();
             Riki();
             ShadowFiend();
             Lina();

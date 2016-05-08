@@ -34,6 +34,8 @@ namespace StormSpiritRewrite
 
         private ZipDodge zipDodge;
 
+        private AntiHeros antiHeros;
+
         private Flee flee;
 
         private DrawText drawText;
@@ -99,9 +101,9 @@ namespace StormSpiritRewrite
             //initiateCombo.InitiateComboDraw(Target);
             
 
-            drawText.DrawTextChaseZip(Variables.InChaseZip);
+            //drawText.DrawTextChaseZip(Variables.InChaseZip);
             drawText.DrawTextFlee(Variables.FleePress);
-            drawText.DrawTextSelfZip(Variables.inSelfZip);
+            //drawText.DrawTextSelfZip(Variables.inSelfZip);
             drawText.DrawTextTpEnabled(Variables.TpEnabled);
             drawText.DrawTextInitiate(Variables.InInitiateZip);
             if (this.Target == null) return;
@@ -147,6 +149,7 @@ namespace StormSpiritRewrite
             this.flee = new Flee();
             this.drawText = new DrawText();
             this.manaDisplay = new ManaDisplay();
+            this.antiHeros = new AntiHeros();
             //this.constants = new Constants();
 
 
@@ -171,7 +174,7 @@ namespace StormSpiritRewrite
             this.targetFind.UnlockTarget();
             manaAbuse.ManaAbusePlayerExecution(args);
             manaDisplay.PlayerExecution_ManaDisplay();
-
+            initiateCombo.PlayerExecution(Target);
         }
 
         public void OnWndProc(WndEventArgs args)
@@ -252,12 +255,27 @@ namespace StormSpiritRewrite
             }
 
             var CanAction = !Me.IsChanneling();
+            
 
-            if (Variables.InInitiateZip && CanAction)
+            if (!Variables.InInitiateZip ||  !CanAction)
             {
-                initiateCombo.Execute(Target);
+                initiateCombo.DisableParticleEffect();
                 return;
             }
+            initiateCombo.DrawParticleEffect(Target);
+            initiateCombo.Execute(Target);
+
+        }
+
+        public void OnUpdate_AntiHeros()
+        {
+            if (this.pause || Variables.Hero == null || !Variables.Hero.IsValid || !Variables.Hero.IsAlive)
+            {
+                return;
+            }
+            var CanAction = !Me.IsChanneling();
+            if (!CanAction) return;
+            antiHeros.Execute();
         }
 
         public void OnUpdate_ManaAbuse()
@@ -292,6 +310,7 @@ namespace StormSpiritRewrite
                 this.pause = Game.IsPaused;
                 return;
             }
+            // no heros nearby just dont do that.
             var CanAction = !Me.IsChanneling();
             if (CanAction)
             {
