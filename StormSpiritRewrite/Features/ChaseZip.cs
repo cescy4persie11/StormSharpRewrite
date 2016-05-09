@@ -94,7 +94,7 @@ namespace StormSpiritRewrite.Features
                 if (zip.CanBeCast() && (!inPassive || (inPassive && !me.IsAttacking() && !myAttackAlmostLand(target))))
                 {
 
-                    if (Utils.SleepCheck("zip"))
+                    if (Utils.SleepCheck("zip") && Prediction.StraightTime(target) > 600)
                     {
                         zip.SetLongZipPosition(target);
                         zip.Use();

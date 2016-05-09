@@ -2,6 +2,7 @@
 
 
 **05/08/2016**
+- Added Zip Predition
 - Added Particle Effects
 - Added Anti Hero mode, it will zip away from danger. Cases include:
 -- Antimage blinks to vicinity
