@@ -164,7 +164,7 @@ namespace StormSpiritRewrite.Utilities
         public void ManaEfficiency()
         {
             this.UpdateItems();
-            UseBottle();
+            //UseBottle();
             UseSoulRing();
             UseStick();
             UseWand();

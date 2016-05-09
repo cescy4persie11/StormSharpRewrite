@@ -33,6 +33,14 @@ namespace StormSpiritRewrite.Features
             }
         }
 
+        private Vortex vortex
+        {
+            get
+            {
+                return Variables.Vortex;
+            }
+        }
+
         private Hero me
         {
             get
@@ -83,7 +91,7 @@ namespace StormSpiritRewrite.Features
             }
 
             //Distance Closing with Long Zip
-            if (me.Distance2D(target) > me.AttackRange + 100)
+            if (me.Distance2D(target) > me.AttackRange + 100 && !vortex.JustFinishedFirstRemnant())
             {
                 if (Utils.SleepCheck("orbwalk"))
                 {

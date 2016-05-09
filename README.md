@@ -1,6 +1,10 @@
 # StormSharp
 
 
+**05/09/2016**
+- Bottle is removed from ManaEfficiency
+- Fixed a bug where Storm wont attack after casting Remnant
+
 **05/08/2016**
 - Added Zip Predition
 - Added Particle Effects

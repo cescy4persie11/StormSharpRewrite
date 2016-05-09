@@ -157,7 +157,7 @@ namespace StormSpiritRewrite.Features
                 }
                 else
                 {
-                    if (vortex.JustFinishedFirstRemnant() && inPassive)
+                    if (vortex.JustFinishedFirstRemnant())
                     {
                         if (Utils.SleepCheck("attack"))
                         {
@@ -167,6 +167,11 @@ namespace StormSpiritRewrite.Features
                     }
                     else
                     {
+                        if (Utils.SleepCheck("attack"))
+                        {
+                            me.Attack(target);
+                            Utils.Sleep(100, "attack");
+                        }
                         chaseZip.Execute(target);
                     }          
                 }

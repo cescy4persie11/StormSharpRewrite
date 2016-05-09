@@ -140,7 +140,7 @@ namespace StormSpiritRewrite.Features
                 if (soulRing.CanBeCasted() && hasDroppedAllManaItem())
                 {
                     
-                    if (Utils.SleepCheck("soulring"))
+                    if (Utils.SleepCheck("soulring") && me.Health * 1.0 / me.MaximumHealth > 0.3)
                     {
                         SwitchTreadToStr();
                         soulRing.UseAbility();
