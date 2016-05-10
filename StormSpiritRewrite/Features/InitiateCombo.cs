@@ -119,11 +119,10 @@ namespace StormSpiritRewrite.Features
                 {
                     if (Utils.SleepCheck("pull"))
                     {
-                        vortex.UseOn(target);
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
-                        //Orbwalking.Attack(Target, true);
+                        vortex.UseOn(target);                   
                         Utils.Sleep(100, "pull");
                     }
+                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                 }
             }
             else //vortex in cooldown
@@ -142,22 +141,22 @@ namespace StormSpiritRewrite.Features
 
                     if (Utils.SleepCheck("Remant attack"))
                     {
-                        if (Orbwalking.AttackOnCooldown() && Orbwalking.CanCancelAnimation())
-                        {
+                        //if (Orbwalking.AttackOnCooldown() && Orbwalking.CanCancelAnimation())
+                        //{
                             //Orbwalking.Orbwalk(target, 0, 0, false, true);
+                           // me.Attack(target);
+                        //}
+                        //else
+                        //{
                             me.Attack(target);
-                        }
-                        else
-                        {
-                            me.Attack(target);
-                        }
+                        //}
                         Utils.Sleep(100, "Remant attack");
                     }
 
                 }
                 else
                 {
-                    if (vortex.JustFinishedFirstRemnant())
+                    if (!zip.NoManaForZip())
                     {
                         if (Utils.SleepCheck("attack"))
                         {
@@ -165,15 +164,9 @@ namespace StormSpiritRewrite.Features
                             Utils.Sleep(100, "attack");
                         }
                     }
-                    else
-                    {
-                        if (Utils.SleepCheck("attack"))
-                        {
-                            me.Attack(target);
-                            Utils.Sleep(100, "attack");
-                        }
-                        chaseZip.Execute(target);
-                    }          
+                    
+                    chaseZip.Execute(target);
+                              
                 }
             }
         }

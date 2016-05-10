@@ -93,22 +93,17 @@ namespace StormSpiritRewrite.Features
             //Distance Closing with Long Zip
             if (me.Distance2D(target) > me.AttackRange + 100 && !vortex.JustFinishedFirstRemnant())
             {
-                if (Utils.SleepCheck("orbwalk"))
-                {
-                    if (target == null) return;
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
-                    Utils.Sleep(100, "orbwalk");
-                }
+                Orbwalking.Orbwalk(target, 0, 0, false, true);
                 if (zip.CanBeCast() && (!inPassive || (inPassive && !me.IsAttacking() && !myAttackAlmostLand(target))))
                 {
 
                     if (Utils.SleepCheck("zip") && Prediction.StraightTime(target) > 600)
                     {
                         zip.SetLongZipPosition(target);
-                        zip.Use();
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                        zip.Use();                      
                         Utils.Sleep(100, "zip");
                     }
+                    Orbwalking.Orbwalk(target, 0, 0, false, true);
                 }
             }
             else

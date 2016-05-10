@@ -61,7 +61,7 @@ namespace StormSpiritRewrite.Abilities
 
         public bool JustFinishedFirstRemnant()
         {
-            return this.ability.Cooldown > 21 - this.ability.Level;
+            return this.ability.Cooldown > 18 - this.ability.Level;
         }
 
         public bool inCoolDown()
