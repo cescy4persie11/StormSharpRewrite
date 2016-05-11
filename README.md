@@ -1,7 +1,7 @@
 # StormSharp
 
 **05/10/2016**
-- Orbwalk sometimes does not attack after spells, it is fixed.
+- Fixed situations where Orbwalk sometimes does not attack after spells
 - Now ChaseZip will zip to Mouse Position
 - ChaseZip will have a special target lock, which constantly shows on the right side, you can attack ground or attack enemy to unlock/relock the target, which is re-selected as the closest to Mouse.
 - ChaseZip is best used by: with the right target locked(right click target or Attack around the target), Hold or Press hotkey with your mouse being at the desired position. 
