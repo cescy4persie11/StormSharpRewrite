@@ -52,6 +52,8 @@ namespace StormSpiritRewrite
 
         private Zip zip;
 
+        private ZipAttack zipAttack;
+
         private bool pause;
 
         public StormSharp()
@@ -76,6 +78,14 @@ namespace StormSpiritRewrite
             get
             {
                 return this.targetFind.Target;
+            }
+        }
+
+        private Hero ZipAttackTarget
+        {
+            get
+            {
+                return this.targetFind.zipAttackTarget;
             }
         }
 
@@ -106,22 +116,30 @@ namespace StormSpiritRewrite
             //drawText.DrawTextSelfZip(Variables.inSelfZip);
             drawText.DrawTextTpEnabled(Variables.TpEnabled);
             drawText.DrawTextInitiate(Variables.InInitiateZip);
-            if (this.Target == null) return;
-            if(Variables.InChaseZip)
+            
+            //if (ZipAttackTarget == null) return;
+            if(!Variables.InInitiateZip && ZipAttackTarget != null)
             {
-                chaseZip.DrawTarget(Target);
-            }else if (Variables.inSelfZip)
-            {
-                selfZip.DrawTarget(Target);
-            }else if (Variables.InInitiateZip)
+                chaseZip.DrawTarget(ZipAttackTarget);
+            }
+            //else if (Variables.inSelfZip)
+            //{
+                //selfZip.DrawTarget(Target);
+            if (Variables.InInitiateZip)
             {
                 initiateCombo.DrawTarget(Target);
             }
             
-            if (Variables.InInitiateZip || Variables.InChaseZip || Variables.inSelfZip)
+            if (Variables.InInitiateZip ||  Variables.inSelfZip)
             {
                 this.targetFind.DrawTarget();
             }
+            if (Variables.InChaseZip)
+            {
+                this.targetFind.DrawZipAttackTarget();
+            }
+            if (ZipAttackTarget == null) return;
+            //this.targetFind.DrawZipAttackTargetOnMyHealthBar();
         }
 
         public void OnLoad()
@@ -150,6 +168,7 @@ namespace StormSpiritRewrite
             this.drawText = new DrawText();
             this.manaDisplay = new ManaDisplay();
             this.antiHeros = new AntiHeros();
+            this.zipAttack = new ZipAttack();
             //this.constants = new Constants();
 
 
@@ -172,9 +191,16 @@ namespace StormSpiritRewrite
             //initiateCombo.InitiateComboPlayerExecution();
             //}
             this.targetFind.UnlockTarget();
+            if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation)
+            {
+                this.targetFind.UnlockZipAttackTarget();
+                this.targetFind.zipAttackFind();
+                this.targetFind.LockZipAttackTarget();
+            }
             manaAbuse.ManaAbusePlayerExecution(args);
             manaDisplay.PlayerExecution_ManaDisplay();
             initiateCombo.PlayerExecution(Target);
+            zipAttack.PlayerExecutionDispose(ZipAttackTarget, !Variables.InChaseZip);
         }
 
         public void OnWndProc(WndEventArgs args)
@@ -194,6 +220,8 @@ namespace StormSpiritRewrite
                 return;
             }
             this.targetFind.Find();
+            this.targetFind.zipAttackFind();
+            if (ZipAttackTarget == null) return;
             manaDisplay.Execute();
         }
 
@@ -236,7 +264,9 @@ namespace StormSpiritRewrite
 
             if (Variables.InChaseZip && CanAction)
             {
-                chaseZip.Execute(Target);
+                //chaseZip.Execute(Target);
+                zipAttack.DrawParticleEffect(ZipAttackTarget);
+                zipAttack.Execute(ZipAttackTarget);
                 return;
             }
         }

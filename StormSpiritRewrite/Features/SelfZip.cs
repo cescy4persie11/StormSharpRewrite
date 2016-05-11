@@ -67,15 +67,17 @@ namespace StormSpiritRewrite.Utilities
                 var inPassive = me.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload");
                 var enemyHitByMyOverload = target.Modifiers.Any(x => x.Name == "modifier_storm_spirit_overload_debuff");
                 // mana efficiency
-                itemUsage.ManaEfficiency();                                     
+                itemUsage.ManaEfficiency();
                 // first self zip
-                if(!inPassive && !enemyHitByMyOverload)
+                Orbwalking.Orbwalk(target, 0, 0, false, true);
+                if (!inPassive && !enemyHitByMyOverload)
                 {
+                    
                     if (Utils.SleepCheck("selfzip"))
                     {
                         zip.SetDynamicSelfZipPosition();
                         zip.Use();
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                        //Orbwalking.Orbwalk(target, 0, 0, false, true);
                         Utils.Sleep(500, "selfzip");
                         return;
                     }
@@ -85,16 +87,10 @@ namespace StormSpiritRewrite.Utilities
                 if (me.Distance2D(target) < 300)
                 {
                     // orbwalk
-                    if (inPassive)
-                    {
-                        if (Utils.SleepCheck("orbwalk"))
-                        {
-                            //orbwalk
-                            if (target == null) return;
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
-                            Utils.Sleep(100, "orbwalk");
-                        }
-                    }
+                    //if (inPassive)
+                    //{
+                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    //}
                     //if < 300, rezip after attack lands   
                     // now support Hold selfZip Attack, Cast Time * speed = 270
                     if (enemyHitByMyOverload && !inPassive)
@@ -103,7 +99,7 @@ namespace StormSpiritRewrite.Utilities
                         {
                             zip.SetDynamicSelfZipPosition();
                             zip.Use();
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            //Orbwalking.Orbwalk(target, 0, 0, false, true);
                             Utils.Sleep(500, "selfzip");
                         }
                     }
@@ -114,13 +110,7 @@ namespace StormSpiritRewrite.Utilities
                     {
                         if (inPassive)
                         {
-                            if (Utils.SleepCheck("orbwalk"))
-                            {
-                                //orbwalk
-                                if (target == null) return;
-                                Orbwalking.Orbwalk(target, 0, 0, false, true);
-                                Utils.Sleep(100, "orbwalk");
-                            }
+                            Orbwalking.Orbwalk(target, 0, 0, false, true);
                         }
                         try {
                             if (myAttackAlmostLand(target))
@@ -129,7 +119,7 @@ namespace StormSpiritRewrite.Utilities
                                 {
                                     zip.SetDynamicSelfZipPosition();
                                     zip.Use();
-                                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                                    //Orbwalking.Orbwalk(target, 0, 0, false, true);
                                     Utils.Sleep(500, "selfzip");
                                 }
                             }
@@ -145,7 +135,7 @@ namespace StormSpiritRewrite.Utilities
                                     {
                                         zip.SetDynamicSelfZipPosition();
                                         zip.Use();
-                                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                                        //Orbwalking.Orbwalk(target, 0, 0, false, true);
                                         Utils.Sleep(500, "selfzip");
                                     }
                                 }

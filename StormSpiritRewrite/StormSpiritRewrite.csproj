@@ -75,6 +75,7 @@
     <Compile Include="Features\InitiateCombo.cs" />
     <Compile Include="Features\ManaAbuse.cs" />
     <Compile Include="Features\ManaDisplay.cs" />
+    <Compile Include="Features\ZipAttack.cs" />
     <Compile Include="Features\ZipDodge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

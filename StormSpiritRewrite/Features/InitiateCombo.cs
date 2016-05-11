@@ -101,7 +101,6 @@ namespace StormSpiritRewrite.Features
                         {
                             zip.SetLongZipPosition(target);
                             zip.Use();
-                            //Orbwalking.Orbwalk(target, 0, 0, false, true);
                             Utils.Sleep(100, "longzip");
                         }
                     }
@@ -141,30 +140,13 @@ namespace StormSpiritRewrite.Features
 
                     if (Utils.SleepCheck("Remant attack"))
                     {
-                        //if (Orbwalking.AttackOnCooldown() && Orbwalking.CanCancelAnimation())
-                        //{
-                            //Orbwalking.Orbwalk(target, 0, 0, false, true);
-                           // me.Attack(target);
-                        //}
-                        //else
-                        //{
-                            me.Attack(target);
-                        //}
-                        Utils.Sleep(100, "Remant attack");
+                        me.Attack(target);
+                        Utils.Sleep(800, "Remant attack");
                     }
 
                 }
                 else
-                {
-                    if (!zip.NoManaForZip())
-                    {
-                        if (Utils.SleepCheck("attack"))
-                        {
-                            me.Attack(target);
-                            Utils.Sleep(100, "attack");
-                        }
-                    }
-                    
+                {                  
                     chaseZip.Execute(target);
                               
                 }
@@ -195,7 +177,10 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTarget(Hero target)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 110, Convert.ToSingle(Drawing.Height * 0.65));
+            var textPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.67));
+            var text = "Combo Target:";
+            Drawing.DrawText(text, textPos, new Vector2(20), Color.Yellow, FontFlags.AntiAlias);
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 110, Convert.ToSingle(Drawing.Height * 0.7));
             var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
             var size = new Vector2(50, 50);
             Drawing.DrawRect(startPos, size + new Vector2(13, -6),

@@ -10,6 +10,7 @@ using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
 using StormSpiritRewrite.Utilities;
 using SharpDX;
+using Ensage.Common.Menu;
 
 namespace StormSpiritRewrite.Features
 {
@@ -74,6 +75,7 @@ namespace StormSpiritRewrite.Features
             //Mana efficiency
             
             itemUsage.ManaEfficiency();
+            Orbwalking.Orbwalk(target, 0, 0, false, true);
             if (inUltimate || inPassive)
             {
                 itemUsage.OffensiveItem(target);
@@ -109,17 +111,17 @@ namespace StormSpiritRewrite.Features
             else
             {
                 //else is just selfZip
-                if (zip.NoManaForZip())
-                {
-                    if (Utils.SleepCheck("orbwalk"))
-                    {
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
-                        Utils.Sleep(100, "orbwalk");
-                    }
-                }
-                else {
+                //if (zip.NoManaForZip())
+                //{
+                   // if (Utils.SleepCheck("orbwalk"))
+                   // {
+                        
+                    //    Utils.Sleep(100, "orbwalk");
+                   // }
+                //}
+                //else {
                     selfZip.Execute(target);
-                }
+               // }
             }
 
         }
@@ -154,7 +156,6 @@ namespace StormSpiritRewrite.Features
                 //this.targetFind.DrawTarget();
             }
         }
-
         public bool AnyHeroCanBeHitByRemnant()
         {
             return
@@ -167,7 +168,11 @@ namespace StormSpiritRewrite.Features
 
         public void DrawTarget(Hero target)
         {
-            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.65));
+            var textPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.67));
+            var text = "Chase Target" + " [" + Utils.KeyToText(Variables.MenuManager.ChaseZipMenu.GetValue<KeyBind>().Key) + "]";
+            Drawing.DrawText(text, textPos, new Vector2(20), Color.Yellow, FontFlags.AntiAlias);
+
+            var startPos = new Vector2(Convert.ToSingle(Drawing.Width) - 130, Convert.ToSingle(Drawing.Height * 0.7));
             var name = "materials/ensage_ui/heroes_horizontal/" + target.Name.Replace("npc_dota_hero_", "") + ".vmat";
             var size = new Vector2(50, 50);
             Drawing.DrawRect(startPos, size + new Vector2(13, -6),

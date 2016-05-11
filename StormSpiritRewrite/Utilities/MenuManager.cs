@@ -36,8 +36,8 @@ namespace StormSpiritRewrite.Utilities
         {
             this.Menu = new Menu("StormSharp", "StormSharp", true, "npc_dota_hero_storm_spirit", true);
             this.LegacyOrQwerMenu = new MenuItem("Hotkey Setting", "Do you use LegacyHotkey?").SetValue(true).SetTooltip("Enable/Disable : Legacy/QWER");
-            this.SelfZipMenu = new MenuItem("SelfZip", "SelfZip").SetValue(new KeyBind('W', KeyBindType.Press));
-            this.ChaseZipMenu = new MenuItem("ChaseZipMenu", "ChaseZipMenu").SetValue(new KeyBind('F', KeyBindType.Press));
+            this.SelfZipMenu = new MenuItem("SelfZip", "SelfZip").SetValue(new KeyBind('F', KeyBindType.Press));
+            this.ChaseZipMenu = new MenuItem("ChaseZipMenu", "ChaseZipMenu").SetValue(new KeyBind('W', KeyBindType.Press));
             this.InitiateZipMenu = new MenuItem("InitiateZip", "InitiateZip").SetValue(new KeyBind('D', KeyBindType.Press));
             this.AutoAttackDodgeMenu = new MenuItem("AutoAttack Dodge", "AutoAttack Dodge").SetValue(true).SetTooltip("");
             this.DropManaItemMenu = new MenuItem("DropManaItem", "Press to Drop Mana Item").SetValue(new KeyBind('Z', KeyBindType.Press));

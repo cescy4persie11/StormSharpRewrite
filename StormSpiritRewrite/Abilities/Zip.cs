@@ -140,6 +140,11 @@ namespace StormSpiritRewrite.Abilities
             this.zipPosition = zipTarget;
         }
 
+        public void SetZipLocation(Vector3 position)
+        {
+            this.zipPosition = position;
+        }
+
         public void Use()
         {
             if (!this.CanBeCast()) return;        
