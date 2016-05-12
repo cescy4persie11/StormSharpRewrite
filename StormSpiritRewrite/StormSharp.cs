@@ -125,7 +125,7 @@ namespace StormSpiritRewrite
             //else if (Variables.inSelfZip)
             //{
                 //selfZip.DrawTarget(Target);
-            if (Variables.InInitiateZip)
+            if (Variables.InInitiateZip && Target != null)
             {
                 initiateCombo.DrawTarget(Target);
             }
@@ -191,7 +191,7 @@ namespace StormSpiritRewrite
             //initiateCombo.InitiateComboPlayerExecution();
             //}
             this.targetFind.UnlockTarget();
-            if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation)
+            if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
             {
                 this.targetFind.UnlockZipAttackTarget();
                 this.targetFind.zipAttackFind();

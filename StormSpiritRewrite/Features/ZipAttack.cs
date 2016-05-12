@@ -74,6 +74,12 @@ namespace StormSpiritRewrite.Features
             itemUsage.ManaEfficiency();
             if (target == null) return;
             if (target.Distance2D(me) > 1500) return;
+            if (Utils.SleepCheck("attack"))
+            {
+                me.Attack(target);
+                Utils.Sleep(300, "attack");
+            }
+            //Game.ExecuteCommand("+dota_camera_center_on_hero");
             if (remnant.CanHitEnemyWithOutPull() && remnant.CanRemnant)
             {
                 if (Utils.SleepCheck("remnant"))
@@ -112,11 +118,7 @@ namespace StormSpiritRewrite.Features
                     zip.Use();                  
                     Utils.Sleep(300, "zip");
                 }
-                if (Utils.SleepCheck("attack"))
-                {
-                    me.Attack(target);
-                    Utils.Sleep(300, "attack");
-                }
+                
             }
         }
 
