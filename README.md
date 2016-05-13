@@ -1,5 +1,8 @@
 # StormSharp
 
+**05/12/2016**
+- Activating Combo Mode will set ZipAttack target to the Combo target.
+
 **05/10/2016**
 - Fixed situations where Orbwalk sometimes does not attack after spells
 - Now ChaseZip will zip to Mouse Position

@@ -33,6 +33,13 @@ namespace StormSpiritRewrite.Utilities
 
         public Hero Target { get; private set; }
 
+        public void SetZipAttackTarget(Hero target)
+        {
+            if (target == null) return;
+            this.zipAttackTarget = target;
+        }
+            
+
         public void DrawTarget()
         {
             if (this.Target == null || !this.Target.IsVisible || !this.Target.IsAlive)

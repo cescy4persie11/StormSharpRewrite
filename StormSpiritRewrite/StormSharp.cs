@@ -293,6 +293,10 @@ namespace StormSpiritRewrite
                 return;
             }
             initiateCombo.DrawParticleEffect(Target);
+            if(this.ZipAttackTarget != this.Target)
+            {
+                this.targetFind.SetZipAttackTarget(this.Target);
+            }
             initiateCombo.Execute(Target);
 
         }
