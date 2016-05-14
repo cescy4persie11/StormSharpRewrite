@@ -194,13 +194,16 @@ namespace StormSpiritRewrite
             manaDisplay.PlayerExecution_ManaDisplay();
             
             if (Target == null) return;
-            if (args.Order == Order.AttackTarget || args.Order == Order.AttackLocation)
+            if (args.Order == Order.AttackTarget)
             {
-                this.targetFind.LockTarget();
+                this.targetFind.UnlockTarget();
+                this.targetFind.Find();
             }
             else
             {
                 this.targetFind.UnlockTarget();
+                //this.targetFind.Find();
+                Console.WriteLine("unlocked");
             }
             if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
             {
@@ -232,7 +235,7 @@ namespace StormSpiritRewrite
                 return;
             }
             
-            this.targetFind.Find();
+            //this.targetFind.Find();
             this.targetFind.zipAttackFind();
             if (ZipAttackTarget == null) return;
             manaDisplay.Execute();
@@ -298,10 +301,11 @@ namespace StormSpiritRewrite
             }
 
             var CanAction = !Me.IsChanneling();
-            if (Target == null) return;
-            //this.targetFind.Find();
+            //if (Target == null) return;
+            this.targetFind.Find();
             this.targetFind.LockTarget();
-
+            if (Target == null) return;
+            Console.WriteLine("target is " + Target.Name);
             if (!Variables.InInitiateZip ||  !CanAction)
             {
                 initiateCombo.DisableParticleEffect();
