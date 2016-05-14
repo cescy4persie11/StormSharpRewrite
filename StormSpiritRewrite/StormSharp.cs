@@ -192,7 +192,12 @@ namespace StormSpiritRewrite
             //}
             manaAbuse.ManaAbusePlayerExecution(args);
             manaDisplay.PlayerExecution_ManaDisplay();
-            
+            if (args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
+            {
+                this.targetFind.UnlockZipAttackTarget();
+                this.targetFind.zipAttackFind();
+                this.targetFind.LockZipAttackTarget();
+            }
             if (Target == null) return;
             if (args.Order == Order.AttackTarget)
             {
@@ -204,13 +209,9 @@ namespace StormSpiritRewrite
                 this.targetFind.UnlockTarget();
                 //this.targetFind.Find();
             }
-            if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
-            {
-                this.targetFind.UnlockZipAttackTarget();
-                this.targetFind.zipAttackFind();
-                this.targetFind.LockZipAttackTarget();
-            }
+            
             initiateCombo.PlayerExecution(Target);
+            if (ZipAttackTarget == null) return;
             zipAttack.PlayerExecutionDispose(ZipAttackTarget, !Variables.InChaseZip);
 
 
@@ -233,11 +234,11 @@ namespace StormSpiritRewrite
             {
                 return;
             }
-            
+            manaDisplay.Execute();
             //this.targetFind.Find();
             this.targetFind.zipAttackFind();
             if (ZipAttackTarget == null) return;
-            manaDisplay.Execute();
+            
         }
 
         public void OnUpdate_SelfZip()
@@ -301,15 +302,19 @@ namespace StormSpiritRewrite
 
             var CanAction = !Me.IsChanneling();
             //if (Target == null) return;
-            this.targetFind.Find();
-            this.targetFind.LockTarget();
-            if (Target == null) return;
-            Console.WriteLine("target is " + Target.Name);
+
+
+            
             if (!Variables.InInitiateZip ||  !CanAction)
             {
                 initiateCombo.DisableParticleEffect();
                 return;
             }
+            //this.targetFind.UnlockTarget(); //always finding
+            this.targetFind.Find();
+            if (Target == null) return;
+            
+            this.targetFind.LockTarget();
             initiateCombo.DrawParticleEffect(Target);
             if(this.ZipAttackTarget != this.Target)
             {
