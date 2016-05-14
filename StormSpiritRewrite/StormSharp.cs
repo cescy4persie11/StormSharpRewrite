@@ -300,7 +300,7 @@ namespace StormSpiritRewrite
             var CanAction = !Me.IsChanneling();
             if (Target == null) return;
             //this.targetFind.Find();
-            //this.targetFind.LockTarget();
+            this.targetFind.LockTarget();
 
             if (!Variables.InInitiateZip ||  !CanAction)
             {
