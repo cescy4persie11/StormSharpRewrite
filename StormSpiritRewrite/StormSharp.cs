@@ -203,7 +203,6 @@ namespace StormSpiritRewrite
             {
                 this.targetFind.UnlockTarget();
                 //this.targetFind.Find();
-                Console.WriteLine("unlocked");
             }
             if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
             {
