@@ -8,6 +8,7 @@ using Ensage.Common;
 using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
 using StormSpiritRewrite.Utilities;
+using StormSpiritRewrite.Features.Orbwalk;
 using SharpDX;
 using StormSpiritRewrite.Abilities;
 
@@ -74,18 +75,19 @@ namespace StormSpiritRewrite.Features
             itemUsage.ManaEfficiency();
             if (target == null) return;
             if (target.Distance2D(me) > 1500) return;
-            if (Utils.SleepCheck("attack"))
-            {
-                me.Attack(target);
-                Utils.Sleep(300, "attack");
-            }
+            //if (Utils.SleepCheck("attack"))
+            //{
+            //    me.Attack(target);
+            //    Utils.Sleep(300, "attack");
+            //}
+            Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
             //Game.ExecuteCommand("+dota_camera_center_on_hero");
             if (remnant.CanHitEnemyWithOutPull() && remnant.CanRemnant)
             {
                 if (Utils.SleepCheck("remnant"))
                 {
                     remnant.Use();
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(100, "remnant");
                 }
             }

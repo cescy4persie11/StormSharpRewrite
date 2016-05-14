@@ -40,7 +40,10 @@ namespace StormSpiritRewrite.Features
             if (Utils.SleepCheck("zip"))
             {
                 zip.SetZipToFountain(dist);
-                zip.Use();
+                if (zip.CanBeCast())
+                {
+                    zip.Use();
+                }
 
                 if (!Cond) return;
                 var Tp = me.Inventory.Items.Any<Item>(x => x.Name == "item_tpscroll");

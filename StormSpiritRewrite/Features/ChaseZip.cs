@@ -9,6 +9,7 @@ using Ensage.Common;
 using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
 using StormSpiritRewrite.Utilities;
+using StormSpiritRewrite.Features.Orbwalk;
 using SharpDX;
 using Ensage.Common.Menu;
 
@@ -75,7 +76,8 @@ namespace StormSpiritRewrite.Features
             //Mana efficiency
             
             itemUsage.ManaEfficiency();
-            Orbwalking.Orbwalk(target, 0, 0, false, true);
+
+            Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
             if (inUltimate || inPassive)
             {
                 itemUsage.OffensiveItem(target);
@@ -87,7 +89,7 @@ namespace StormSpiritRewrite.Features
                 if (Utils.SleepCheck("remnant"))
                 {
                     remnant.Use();
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(100, "remnant");
                 }
             }
@@ -95,7 +97,7 @@ namespace StormSpiritRewrite.Features
             //Distance Closing with Long Zip
             if (me.Distance2D(target) > me.AttackRange + 100 && !vortex.JustFinishedFirstRemnant())
             {
-                Orbwalking.Orbwalk(target, 0, 0, false, true);
+                Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                 if (zip.CanBeCast() && (!inPassive || (inPassive && !me.IsAttacking() && !myAttackAlmostLand(target))))
                 {
 
@@ -105,7 +107,7 @@ namespace StormSpiritRewrite.Features
                         zip.Use();                      
                         Utils.Sleep(100, "zip");
                     }
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                 }
             }
             else

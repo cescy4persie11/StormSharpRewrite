@@ -8,6 +8,7 @@ using Ensage;
 using Ensage.Common;
 using Ensage.Common.Extensions;
 using Ensage.Common.Objects.UtilityObjects;
+using StormSpiritRewrite.Features;
 using SharpDX;
 
 namespace StormSpiritRewrite.Utilities
@@ -56,7 +57,7 @@ namespace StormSpiritRewrite.Utilities
                 if (Utils.SleepCheck("selfzip")) {
                     zip.SetStaticSelfZipPosition();
                     zip.Use();
-                    Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    Features.Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                     Utils.Sleep(1000, "selfzip");
                 }
                 return;
@@ -69,7 +70,7 @@ namespace StormSpiritRewrite.Utilities
                 // mana efficiency
                 itemUsage.ManaEfficiency();
                 // first self zip
-                Orbwalking.Orbwalk(target, 0, 0, false, true);
+                Features.Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                 if (!inPassive && !enemyHitByMyOverload)
                 {
                     
@@ -89,7 +90,7 @@ namespace StormSpiritRewrite.Utilities
                     // orbwalk
                     //if (inPassive)
                     //{
-                        Orbwalking.Orbwalk(target, 0, 0, false, true);
+                    Features.Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                     //}
                     //if < 300, rezip after attack lands   
                     // now support Hold selfZip Attack, Cast Time * speed = 270
@@ -110,7 +111,7 @@ namespace StormSpiritRewrite.Utilities
                     {
                         if (inPassive)
                         {
-                            Orbwalking.Orbwalk(target, 0, 0, false, true);
+                            Features.Orbwalk.Orbwalking.Orbwalk(target, 0, 0, false, true);
                         }
                         try {
                             if (myAttackAlmostLand(target))

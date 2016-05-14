@@ -1,5 +1,9 @@
 # StormSharp
 
+**05/14/16**
+- adjust orbwalk by importing and changing EnsageCommon Orbwalk from **Moones**
+- Lina dodge is optimized. This is because of the fact turn time by movement and cast are slightly different as cast does not need a direct facing direction
+
 **05/12/2016**
 - Activating Combo Mode will set ZipAttack target to the Combo target.
 

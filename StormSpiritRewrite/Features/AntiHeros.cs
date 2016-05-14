@@ -93,6 +93,7 @@ namespace StormSpiritRewrite.Features
             //Blademail_AntiAntiMage();
             //Emuls_AntiAntiMage();
             EvadeAntiMage();
+            Blademail_AntiAntiMage();
             EvadeAxe();
             EvadeSlardar();
         }

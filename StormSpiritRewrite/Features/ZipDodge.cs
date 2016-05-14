@@ -224,13 +224,14 @@ namespace StormSpiritRewrite.Features
             var cond = Laguna.IsInAbilityPhase && IsFacing(Lina, me) && zip.CanBeCast();
             if (cond)
             {
-                DelayAction.Add(250 - 2 * Game.Ping - (int)Math.Round((me.GetTurnTime(zip.zipLoc) * 1000)),
+                Console.WriteLine("time to turn is " + (me.GetTurnTime(zip.zipLoc) * 1000));
+                DelayAction.Add(250 - 2 * Game.Ping - (int)Math.Round((me.GetTurnTime(zip.zipLoc) * 1000 * 1.1)),
                     () => {
                         if (Utils.SleepCheck("zip"))
                         {
                             zip.SetDodgeZipPosition(me, Lina, Laguna);
                             zip.Use();
-                            Utils.Sleep(200, "zip");
+                            Utils.Sleep(1000, "zip");
                         }
                     }
                 );

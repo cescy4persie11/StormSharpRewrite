@@ -190,17 +190,29 @@ namespace StormSpiritRewrite
             //chaseZip.ChaseZipPlayerExecution();
             //initiateCombo.InitiateComboPlayerExecution();
             //}
-            this.targetFind.UnlockTarget();
+            manaAbuse.ManaAbusePlayerExecution(args);
+            manaDisplay.PlayerExecution_ManaDisplay();
+            
+            if (Target == null) return;
+            if (args.Order == Order.AttackTarget || args.Order == Order.AttackLocation)
+            {
+                this.targetFind.LockTarget();
+            }
+            else
+            {
+                this.targetFind.UnlockTarget();
+            }
             if(args.Order == Order.AttackTarget || args.Order == Order.AttackLocation || !ZipAttackTarget.IsAlive)
             {
                 this.targetFind.UnlockZipAttackTarget();
                 this.targetFind.zipAttackFind();
                 this.targetFind.LockZipAttackTarget();
             }
-            manaAbuse.ManaAbusePlayerExecution(args);
-            manaDisplay.PlayerExecution_ManaDisplay();
             initiateCombo.PlayerExecution(Target);
             zipAttack.PlayerExecutionDispose(ZipAttackTarget, !Variables.InChaseZip);
+
+
+
         }
 
         public void OnWndProc(WndEventArgs args)
@@ -219,6 +231,7 @@ namespace StormSpiritRewrite
             {
                 return;
             }
+            
             this.targetFind.Find();
             this.targetFind.zipAttackFind();
             if (ZipAttackTarget == null) return;
@@ -285,7 +298,9 @@ namespace StormSpiritRewrite
             }
 
             var CanAction = !Me.IsChanneling();
-            
+            if (Target == null) return;
+            //this.targetFind.Find();
+            //this.targetFind.LockTarget();
 
             if (!Variables.InInitiateZip ||  !CanAction)
             {
