@@ -73,6 +73,7 @@ namespace StormSpiritRewrite.Features
         {
             Update();
             itemUsage.ManaEfficiency();
+            itemUsage.OffensiveItem(target);
             if (target == null) return;
             if (target.Distance2D(me) > 1500) return;
             //if (Utils.SleepCheck("attack"))

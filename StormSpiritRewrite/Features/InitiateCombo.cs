@@ -79,6 +79,7 @@ namespace StormSpiritRewrite.Features
             // Mana Effiency
             
             itemUsage.ManaEfficiency();
+            itemUsage.OffensiveItem(target);
             if (inUltimate || (inPassive && (remnant.isInCoolDown || vortex.inCoolDown())))
             {
                 itemUsage.OffensiveItem(target);
